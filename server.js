@@ -65,12 +65,14 @@ app.post('/getListofTrackerByuser', function(req, res){
               res.send({ success: false, message: err });
           }         
           ids = _.pluck(docs, 'deviceIMEIID');
+          let result = [];
           deviceModel.findOne({ deviceIMEIID: { $in: ids }}, {deviceIMEIID: true, location: true, speed: true, UTC_time:true }).sort({ 'Created_date': -1 }).exec( function (err, resultss)
           {
             if (err) {
               res.send({ success: false, message: err });
             } 
-            res.json({ success: true, data: resultss});
+            result.push(resultss);
+            res.json({ success: true, data: result});
           });
 
           //res.json({ success: true, data: docs});
@@ -103,7 +105,9 @@ app.post('/getLocationByDeviceId', function(req, res) {
       console.log(end);
       
 
-      // let dateRange = req.body.dateRange;
+      let dateRange = req.body.dateRange;
+
+
 
       // switch (dateRange) {
       //   case value:
