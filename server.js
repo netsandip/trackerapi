@@ -65,7 +65,7 @@ app.post('/getListofTrackerByuser', function(req, res){
           }         
           ids = _.pluck(docs, 'deviceIMEIID');
           console.log(ids);
-          deviceModel.findOne({ deviceIMEIID: { $in: ids } }, function (err, resultss)
+          deviceModel.findOne({ deviceIMEIID: { $in: ids }}, {deviceIMEIID: true, location: true, speed: true, UTC_time:true }, function (err, resultss)
           {
             if (err) {
               res.send({ success: false, message: err });
