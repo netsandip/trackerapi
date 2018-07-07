@@ -11,6 +11,7 @@ var cors = require('cors');
 var _ = require('underscore');
 var deviceSchema = require('./dbmodel/device');
 var deviceModel = mongoose.model('deviceInfo', deviceSchema, 'device_gps');
+var moment = require('moment');
 
 var deviceMasterSchema = require('./dbmodel/deviceMaster');
 var deviceMasterModel = mongoose.model('deviceMasterInfo', deviceMasterSchema, 'device_gps_master');
@@ -64,13 +65,12 @@ app.post('/getListofTrackerByuser', function(req, res){
               res.send({ success: false, message: err });
           }         
           ids = _.pluck(docs, 'deviceIMEIID');
-          console.log(ids);
           deviceModel.findOne({ deviceIMEIID: { $in: ids }}, {deviceIMEIID: true, location: true, speed: true, UTC_time:true }).sort({ 'Created_date': -1 }).exec( function (err, resultss)
           {
             if (err) {
               res.send({ success: false, message: err });
             } 
-            res.json(resultss);
+            res.json({ success: true, data: resultss});
           });
 
           //res.json({ success: true, data: docs});
@@ -94,6 +94,25 @@ app.post('/getLocationByDeviceId', function(req, res) {
       start.setHours(0,0,0,0);
       var end = new Date();
       end.setHours(23,59,59,999);
+     
+      var returned_endate = moment().add(-2, 'days');
+      const myDate = moment(returned_endate).toISOString();
+
+      console.log("-2 data " + myDate);
+      console.log(start);
+      console.log(end);
+      
+
+      // let dateRange = req.body.dateRange;
+
+      // switch (dateRange) {
+      //   case value:
+          
+      //     break;
+      
+      //   default:
+      //     break;
+      // }
 
       deviceModel.find({deviceIMEIID: req.body.deviceid, Created_date: {$gte: start, $lt: end}},{deviceIMEIID: true, location: true, speed: true}).sort({ 'Created_date': -1 }).exec(
       function(err, docs) {
