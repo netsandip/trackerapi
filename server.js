@@ -85,6 +85,81 @@ app.post('/getListofTrackerByuser', function(req, res){
 });
 
 
+app.post('/getSensorDataByDeviceId', function(req, res) {
+    
+  try {
+    var start = new Date();
+    var end = new Date();      
+
+    let dateRange = req.body.dateRange;
+
+    switch (dateRange) {
+      case "Last 1 hour":
+      end = moment().add(-1, 'hours').toDate();
+        break;
+      
+      case "Last 5 hours":
+      end = moment().add(-5, 'hours').toDate();
+        break;
+
+      case "Last 10 hours":
+      end = moment().add(-10, 'hours').toDate();
+        break;
+      
+      case "Last 24 hours":
+      end = moment().add(-1, 'days').toDate();
+        break;
+    
+      case "Last 48 hours":
+        end = moment().add(-2, 'days').toDate();
+        break;
+      
+      case "Last 72 hours":
+      end = moment().add(-3, 'days').toDate();
+        break;
+
+      case "Last 7 days":
+      end = moment().add(-7, 'days').toDate();
+        break;
+      
+      case "Last 14 days":
+      end = moment().add(-14, 'days').toDate();
+        break;
+      
+      case "Last 30 days":
+      end = moment().add(-30, 'days').toDate();
+        break;
+
+      case "Last 60 days":
+      end = moment().add(-60, 'days').toDate();
+        break;
+
+      case "Last 90 days":
+      end = moment().add(-90, 'days').toDate();
+        break;
+
+      default:
+      start = req.body.startDate;
+      end = req.body.endDate
+        break;
+    }
+    
+    // console.log("start " + start + "end " + end );
+    deviceModel.find({deviceIMEIID: req.body.deviceid, Created_date: {$gte: end, $lt: start }},{deviceIMEIID: true, Temperature: true, humidity: true, Pressure:true, Light: true, motionActivity: true, Acceleration:true
+      , XYZ_Acceleration:true, Orientation:true, UTC_time: true}).sort({ 'Created_date': -1 }).exec(
+    function(err, docs) {
+        if (err) {
+            res.send({ success: false, message: err });
+        }       
+       
+    res.json({ success: true, data: docs});
+    }
+  );
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error });
+  }
+});
 
 
 
