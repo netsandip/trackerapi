@@ -122,7 +122,7 @@ app.post('/createTemplate', function(req, res)
 
 		let templateInfo = new shipmenttemplateModel(devicedata);
 
-		shipmenttemplateModel.findOne({templateName: devicedata.templatename}, function(err,obj) { 
+		shipmenttemplateModel.findOne({templateName: devicedata.templateName}, function(err,obj) { 
 			//console.log(obj); 
 			if (obj == undefined) {
 				templateInfo.save(function (err) {
@@ -153,7 +153,7 @@ app.post('/createShipment', function(req, res)
 
 		let shipinfo = new shipmentSchemaModel(devicedata);
 
-		shipmentSchemaModel.findOne({shipment_name: devicedata.shipmentName}, function(err,obj) { 
+		shipmentSchemaModel.findOne({shipment_name: devicedata.shipment_name}, function(err,obj) { 
 			//console.log(obj); 
 			if (obj == undefined) {
 				shipinfo.save(function (err) {
@@ -166,7 +166,7 @@ app.post('/createShipment', function(req, res)
 			}
 			else
 			{
-				res.json({ "success": false, "errormessage": "userid already exists in the system" });
+				res.json({ "success": false, "errormessage": "shipment already exists in the system" });
 			}		
 		
 		});        
