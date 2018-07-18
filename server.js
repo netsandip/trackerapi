@@ -9,12 +9,23 @@ var config = require('./config');
 var connection = require('./connection');
 var cors = require('cors');
 var _ = require('underscore');
+var moment = require('moment');
+
+var userSchema = require('./dbmodel/users');
+var UserModel = mongoose.model('usersinfo', userSchema, 'users_gps');
+
 var deviceSchema = require('./dbmodel/device');
 var deviceModel = mongoose.model('deviceInfo', deviceSchema, 'device_gps');
-var moment = require('moment');
 
 var deviceMasterSchema = require('./dbmodel/deviceMaster');
 var deviceMasterModel = mongoose.model('deviceMasterInfo', deviceMasterSchema, 'device_gps_master');
+
+var shipmentSchema = require('./dbmodel/shipment');
+var shipmentSchemaModel = mongoose.model('shipmentSchemaInfo', shipmentSchema, 'shipmentmaster_gps');
+
+var shipmenttemplate = require('./dbmodel/shipmenttemplate');
+var shipmenttemplateModel = mongoose.model('shipmenttemplateInfo', shipmenttemplate, 'shipmenttemplate_gps');
+
 
 app.use(bodyparser.json());
 app.use(cors());
@@ -55,6 +66,139 @@ app.post('/createDevice', function(req, res)
 		LogError(error, "createDevice");
 	}
 });
+
+app.post('/validateLogin', function(req, res)
+{	
+	UserModel.findOne({userid: req.body.userid, Password: req.body.password },{userid: true, Role: true}, function(err,obj) { 
+		
+		if (obj != undefined) {
+			res.json({ "success": true, "errormessage": "", data: obj });
+		}
+		else
+		{
+			res.json({ "success": false, "errormessage": "authentication mismatch or user doesnt exists in the system " });
+		}		
+	
+	});
+});
+
+app.post('/createUser', function(req, res)
+{
+	try {
+		
+		var userdata = req.body;
+
+		var userInfo = new UserModel(userdata);
+
+		UserModel.findOne({userid: userdata.userid}, function(err,obj) { 
+			//console.log(obj); 
+			if (obj == undefined) {
+				userInfo.save(function (err) {
+					if (err) {
+						LogError(err, "createUser");
+						res.status(400).send(err);
+					}
+					else { res.json({ "success": true, "errormessage": "" }); }
+				});	
+			}
+			else
+			{
+				res.json({ "success": false, "errormessage": "userid already exists in the system" });
+			}		
+		
+		});        
+		
+	} catch (error) {
+		LogError(error, "createUser");
+	}
+});
+
+
+app.post('/createTemplate', function(req, res)
+{
+	try {
+		
+		let devicedata = req.body;
+
+		let templateInfo = new shipmenttemplateModel(devicedata);
+
+		shipmenttemplateModel.findOne({templateName: devicedata.templatename}, function(err,obj) { 
+			//console.log(obj); 
+			if (obj == undefined) {
+				templateInfo.save(function (err) {
+					if (err) {
+						LogError(err, "createTemplate");
+						res.status(400).send(err);
+					}
+					else { res.json({ "success": true, "errormessage": "" }); }
+				});	
+			}
+			else
+			{
+				res.json({ "success": false, "errormessage": "Template information exists in the system" });
+			}		
+		
+		});        
+		
+	} catch (error) {
+		LogError(error, "createTemplate");
+	}
+});
+
+app.post('/createShipment', function(req, res)
+{
+	try {
+		
+		let devicedata = req.body;
+
+		let shipinfo = new shipmentSchemaModel(devicedata);
+
+		shipmentSchemaModel.findOne({shipment_name: devicedata.shipmentName}, function(err,obj) { 
+			//console.log(obj); 
+			if (obj == undefined) {
+				shipinfo.save(function (err) {
+					if (err) {
+						LogError(err, "createDevice");
+						res.status(400).send(err);
+					}
+					else { res.json({ "success": true, "errormessage": "" }); }
+				});	
+			}
+			else
+			{
+				res.json({ "success": false, "errormessage": "userid already exists in the system" });
+			}		
+		
+		});        
+		
+	} catch (error) {
+		LogError(error, "createDevice");
+	}
+});
+
+
+app.post('/listofShipTempelatesByUser', function(req, res){
+  try {
+    // if (req.body.userid == undefined) {
+    //   res.send({ success: false, message: "Userid is not passed in the parameter" });
+    //   return;
+    // }
+
+    shipmenttemplateModel.find({}, {templateName: true, template_code: true }).exec(
+      function(err, docs) {
+          if (err) {
+              res.send({ success: false, message: err });
+          }                             
+            res.json({ success: true, data: docs});
+          //res.json({ success: true, data: docs});
+      }
+    );
+  } catch (error) {
+    console.log(error);
+      res.json({ success: false, message: error });
+  }
+});
+
 
 
 app.post('/getListofTrackerByuser', function(req, res){
