@@ -237,6 +237,28 @@ app.post('/listofShipTempelatesByUser', function(req, res){
 });
 
 
+app.post('/getTelemeticsDataByDeviceID', function(req, res){
+  try {
+    
+        deviceModel.findOne({ deviceIMEIID: req.body.deviceid}, {deviceIMEIID: true, _id: false, 
+          Temperature:true, humidity: true, Pressure: true, Light: true, motionActivity: true, Acceleration: true, UTC_time: true,
+          XYZ_Acceleration: true, Orientation: true }).sort({ 'Created_date': -1 }).exec( function (err, resultss)
+        {
+            if (err) {
+              res.send({ success: false, message: err });
+            } 
+  
+            res.json({ success: true, data: resultss});
+        });
+
+      
+  } catch (error) {
+    console.log(error);
+      res.json({ success: false, message: error });
+  }
+});
+
+
 
 app.post('/getListofTrackerByuser', function(req, res){
   try {
