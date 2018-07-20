@@ -138,7 +138,7 @@ app.post('/createTemplate', function(req, res)
 				res.json({ "success": false, "errormessage": "Template information exists in the system" });
 			}		
 		
-		});        
+		});         
 		
 	} catch (error) {
 		LogError(error, "createTemplate");
@@ -175,6 +175,43 @@ app.post('/createShipment', function(req, res)
 		LogError(error, "createDevice");
 	}
 });
+
+app.post('/getShipmentByStatus', function(req, res)
+{
+	try {
+
+    var start = new Date();
+    var end = new Date();      
+		
+		let devicedata = req.body;
+
+    let query;
+
+    if (devicedata.status = "upcoming") {
+      query = { deliveryDate: {$gte: end }};
+    } else if (devicedata.status = "active") {
+      query = { deliveryDate: {$gte: end, $lt: start }};
+    } else {
+      query = { deliveryDate: { $lt: end }};
+    }
+
+		shipmentSchemaModel.find(query,  function(err,docs) { 
+			//console.log(obj); 
+			if (docs == undefined) {
+				res.json({ "success": true, "errormessage": "No record found" });
+			}
+			else
+			{
+				res.json({ success: true, data: docs});
+			}		
+		
+		});        
+		
+	} catch (error) {
+		LogError(error, "getShipmentByStatus");
+	}
+});
+
 
 
 app.post('/listofShipTempelatesByUser', function(req, res){
