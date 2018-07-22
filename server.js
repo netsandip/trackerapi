@@ -10,7 +10,7 @@ var connection = require('./connection');
 var cors = require('cors');
 var _ = require('underscore');
 var moment = require('moment');
-
+var util = require('util');
 var userSchema = require('./dbmodel/users');
 var UserModel = mongoose.model('usersinfo', userSchema, 'users_gps');
 
@@ -195,22 +195,31 @@ app.post('/getShipmentByStatus', function(req, res)
       query = { deliveryDate: { $lt: end }};
     }
 
-		shipmentSchemaModel.find(query,  function(err,docs) { 
-			//console.log(obj); 
-			if (docs == undefined) {
-				res.json({ "success": true, "errormessage": "No record found" });
-			}
-			else
-			{
-				res.json({ success: true, data: docs});
-			}		
-		
-		});        
-		
+    shipmentSchemaModel.aggregate([
+      { "$match": { "shipment_name" : "ssd" } },    
+      {
+          "$lookup": {
+              "from": "shipmenttemplate_gps",
+              "localField": "shipment_template_id",
+              "foreignField": "template_code",
+              "as": "resultingTagsArray"
+          }
+      }
+   ]).exec(function(err, results){
+    if (results == undefined) {
+      res.json({ "success": true, "errormessage": "No record found" });
+    }
+    else
+    {
+      res.json({ success: true, data: results});
+    }		
+      //console.log(util.inspect(results, { showHidden: false, depth: null }));
+   });		
 	} catch (error) {
 		LogError(error, "getShipmentByStatus");
 	}
 });
+
 
 
 
@@ -284,6 +293,97 @@ app.post('/getListofTrackerByuser', function(req, res){
   } catch (error) {
     console.log(error);
       res.json({ success: false, message: error });
+  }
+});
+
+app.post('/getGraphsDataforSensors', function(req, res) {
+    
+  try {
+    var start = new Date();
+    var end = new Date();      
+
+    let dateRange = req.body.dateRange;
+
+    switch (dateRange) {
+      case "Last 1 hour":
+      end = moment().add(-1, 'hours').toDate();
+        break;
+      
+      case "Last 5 hours":
+      end = moment().add(-5, 'hours').toDate();
+        break;
+
+      case "Last 10 hours":
+      end = moment().add(-10, 'hours').toDate();
+        break;
+      
+      case "Last 24 hours":
+      end = moment().add(-1, 'days').toDate();
+        break;
+    
+      case "Last 48 hours":
+        end = moment().add(-2, 'days').toDate();
+        break;
+      
+      case "Last 72 hours":
+      end = moment().add(-3, 'days').toDate();
+        break;
+
+      case "Last 7 days":
+      end = moment().add(-7, 'days').toDate();
+        break;
+      
+      case "Last 14 days":
+      end = moment().add(-14, 'days').toDate();
+        break;
+      
+      case "Last 30 days":
+      end = moment().add(-30, 'days').toDate();
+        break;
+
+      case "Last 60 days":
+      end = moment().add(-60, 'days').toDate();
+        break;
+
+      case "Last 90 days":
+      end = moment().add(-90, 'days').toDate();
+        break;
+
+      default:
+      start = req.body.startDate;
+      end = req.body.endDate
+        break;
+    }
+
+    let pipeline = [
+        {
+           $match: { Created_date: { $lt: ISODate(start)}},
+        },
+        {
+          $group: {
+            _id: {
+              deviceIMEIID: req.body.deviceid,
+              $week: '$Created_date'
+            },
+            Temperature: {$sum:1}
+          }
+        }
+    ];
+
+    deviceModel.aggregate(pipeline).exec(
+      function(err, docs) {
+          if (err) {
+              res.send({ success: false, message: err });
+          }       
+         
+      res.json({ success: true, data: docs});
+      });
+
+       
+    
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error });
   }
 });
 
