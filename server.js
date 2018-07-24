@@ -303,50 +303,64 @@ app.post('/getGraphsDataforSensors', function(req, res) {
     var end = new Date();      
 
     let dateRange = req.body.dateRange;
+    let interval;
 
     switch (dateRange) {
       case "Last 1 hour":
       end = moment().add(-1, 'hours').toDate();
+      interval = {
+          $hour: '$Created_date'
+      };
         break;
       
       case "Last 5 hours":
       end = moment().add(-5, 'hours').toDate();
+      interval = { $hour: '$Created_date'};
         break;
 
       case "Last 10 hours":
       end = moment().add(-10, 'hours').toDate();
+      interval = {$hour: '$Created_date'};
         break;
       
       case "Last 24 hours":
       end = moment().add(-1, 'days').toDate();
+      interval = {$hour: '$Created_date'};
         break;
     
       case "Last 48 hours":
         end = moment().add(-2, 'days').toDate();
+        interval = {$dayOfMonth: '$Created_date'};
         break;
       
       case "Last 72 hours":
       end = moment().add(-3, 'days').toDate();
+      interval = {$dayOfMonth: '$Created_date'};
         break;
 
       case "Last 7 days":
       end = moment().add(-7, 'days').toDate();
+      interval = {$dayOfMonth: '$Created_date'};
         break;
       
       case "Last 14 days":
       end = moment().add(-14, 'days').toDate();
+      interval = {$week: '$Created_date'};
         break;
       
       case "Last 30 days":
       end = moment().add(-30, 'days').toDate();
+      interval = {$week: '$Created_date'};
         break;
 
       case "Last 60 days":
       end = moment().add(-60, 'days').toDate();
+      interval = {$month: '$Created_date'};
         break;
 
       case "Last 90 days":
       end = moment().add(-90, 'days').toDate();
+      interval = {$month: '$Created_date'};
         break;
 
       default:
@@ -357,15 +371,12 @@ app.post('/getGraphsDataforSensors', function(req, res) {
 
     let pipeline = [
         {
-           $match: { Created_date: { $lt: ISODate(start)}},
+           $match: { deviceIMEIID: req.body.deviceid, Created_date: {$gte: end, $lt: start }},
         },
         {
           $group: {
-            _id: {
-              deviceIMEIID: req.body.deviceid,
-              $week: '$Created_date'
-            },
-            Temperature: {$sum:1}
+            _id: interval,
+            avgTemperature: {$avg: "$Temperature"}
           }
         }
     ];
