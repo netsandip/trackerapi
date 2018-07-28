@@ -26,6 +26,12 @@ var shipmentSchemaModel = mongoose.model('shipmentSchemaInfo', shipmentSchema, '
 var shipmenttemplate = require('./dbmodel/shipmenttemplate');
 var shipmenttemplateModel = mongoose.model('shipmenttemplateInfo', shipmenttemplate, 'shipmenttemplate_gps');
 
+var alertsmaster = require('./dbmodel/alertsmaster');
+var alertsmasterModel = mongoose.model('alertsmasterInfo', alertsmaster, 'alerts_master_gps');
+
+var alertsTransmaster = require('./dbmodel/alertsTrans');
+var alertsmasterModel = mongoose.model('alertsTransInfo', alertsTransmaster, 'alerts_master_gps');
+
 
 app.use(bodyparser.json());
 app.use(cors());
@@ -309,7 +315,7 @@ app.post('/getGraphsDataforSensors', function(req, res) {
       case "Last 1 hour":
       end = moment().add(-1, 'hours').toDate();
       interval = {
-          $hour: '$Created_date'
+          $minute: '$Created_date'
       };
         break;
       
@@ -345,22 +351,22 @@ app.post('/getGraphsDataforSensors', function(req, res) {
       
       case "Last 14 days":
       end = moment().add(-14, 'days').toDate();
-      interval = {$week: '$Created_date'};
+      interval = {$dayOfMonth: '$Created_date'};
         break;
       
       case "Last 30 days":
       end = moment().add(-30, 'days').toDate();
-      interval = {$week: '$Created_date'};
+      interval = {$dayOfMonth: '$Created_date'};
         break;
 
       case "Last 60 days":
       end = moment().add(-60, 'days').toDate();
-      interval = {$month: '$Created_date'};
+      interval = {$week: '$Created_date'};
         break;
 
       case "Last 90 days":
       end = moment().add(-90, 'days').toDate();
-      interval = {$month: '$Created_date'};
+      interval = {$week: '$Created_date'};
         break;
 
       default:
