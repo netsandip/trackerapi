@@ -73,6 +73,38 @@ app.post('/createDevice', function(req, res)
 	}
 });
 
+app.post('/createalertsmaster', function(req, res)
+{
+	try {
+		
+		let alertsdata = req.body;
+
+		let alertsmasterModelInfo = new alertsmasterModel(alertsdata);
+
+		alertsmasterModel.findOne({alerts_master_name: alertsdata.alerts_master_name}, function(err,obj) { 
+			//console.log(obj); 
+			if (obj == undefined) {
+				alertsmasterModelInfo.save(function (err) {
+					if (err) {
+						LogError(err, "createalertsmaster");
+						res.status(400).send(err);
+					}
+					else { res.json({ "success": true, "errormessage": "" }); }
+				});	
+			}
+			else
+			{
+				res.json({ "success": false, "errormessage": "alerts name exists in the system" });
+			}		
+		
+		});        
+		
+	} catch (error) {
+		LogError(error, "createalertsmaster");
+	}
+});
+
+
 app.post('/validateLogin', function(req, res)
 {	
 	UserModel.findOne({userid: req.body.userid, Password: req.body.password },{userid: true, Role: true}, function(err,obj) { 
@@ -283,6 +315,7 @@ app.post('/getListofTrackerByuser', function(req, res){
               res.send({ success: false, message: err });
           }         
           ids = _.pluck(docs, 'deviceIMEIID');
+          console.log(ids);
           let result = [];
           deviceModel.findOne({ deviceIMEIID: { $in: ids }}, {deviceIMEIID: true, location: true, speed: true, UTC_time:true }).sort({ 'Created_date': -1 }).exec( function (err, resultss)
           {
@@ -382,7 +415,15 @@ app.post('/getGraphsDataforSensors', function(req, res) {
         {
           $group: {
             _id: interval,
-            avgTemperature: {$avg: "$Temperature"}
+            avgTemperature: {$avg: "$Temperature"},
+            avgHumidity: { $avg: "$humidity"},
+            avgPressure: { $avg: "$Pressure"},
+            avgLight: { $avg: "$Light"},
+            avgmotionActivity: { $avg: "$motionActivity"},
+            avgmAcceleration: { $avg: "$Acceleration"},
+            avgXYZ_Acceleration: { $avg: "$XYZ_Acceleration" },
+            avgOrientation: { $avg: "$Orientation" }
+
           }
         }
     ];
