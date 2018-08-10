@@ -307,7 +307,7 @@ app.post('/getShipmentDetailsbyUser', function(req, res){
 app.post('/getprofilesByUser', function(req, res){
   try {
     
-    UserModel.findOne({userid: userdata.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
+    UserModel.findOne({userid: req.body.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
         {
             if (err) {
               res.send({ success: false, message: err });
