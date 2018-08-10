@@ -10,6 +10,7 @@ alertsMasterSchema = mongoose.Schema({
     alerts_type: String,   
     alerts_value: String,    
     alerts_action: String,    
+    userid: String,
     updated_date : Date,
     Created_date : { type : Date, default: Date.now }
 });

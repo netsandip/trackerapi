@@ -283,6 +283,65 @@ app.post('/listofShipTempelatesByUser', function(req, res){
   }
 });
 
+app.post('/getShipmentDetailsbyUser', function(req, res){
+
+  try {
+    //{userid: userdata.userid}
+    shipmenttemplateModel.find({}, {shipFrom: true, shipTo: true }).exec( function (err, resultss)
+      {
+          if (err) {
+            res.send({ success: false, message: err });
+          } 
+
+          res.json({ success: true, data: resultss});
+      });
+  } catch (error) {
+    console.log(error);
+      res.json({ success: false, message: error });
+  }
+
+
+      
+});
+
+app.post('/getprofilesByUser', function(req, res){
+  try {
+    
+    UserModel.findOne({userid: userdata.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
+        {
+            if (err) {
+              res.send({ success: false, message: err });
+            } 
+  
+            res.json({ success: true, data: resultss});
+        });
+
+      
+  } catch (error) {
+    console.log(error);
+      res.json({ success: false, message: error });
+  }
+});
+
+app.post('/getAlertsNotificationByUser', function(req, res){
+  try {
+    
+    alertsmasterModel.findOne({userid: userdata.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
+        {
+            if (err) {
+              res.send({ success: false, message: err });
+            } 
+  
+            res.json({ success: true, data: resultss});
+        });
+
+      
+  } catch (error) {
+    console.log(error);
+      res.json({ success: false, message: error });
+  }
+});
+
 
 app.post('/getTelemeticsDataByDeviceID', function(req, res){
   try {

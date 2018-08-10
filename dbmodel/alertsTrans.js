@@ -10,6 +10,7 @@ alertsTransSchema = mongoose.Schema({
     alerts_value: String,    
     alerts_action: String,
     alerts_message: String,    
+    userid: String,
     updated_date : Date,
     Created_date : { type : Date, default: Date.now } 
 });

@@ -7,6 +7,12 @@ var connection = require('./connection');
 var deviceSchema = require('./dbmodels/device');
 var deviceModel = mongoose.model('deviceInfo',deviceSchema, 'device_gps');
 
+var alertsmaster = require('./dbmodel/alertsmaster');
+var alertsmasterModel = mongoose.model('alertsmasterInfo', alertsmaster, 'alerts_master_gps');
+
+var alertsTransmaster = require('./dbmodel/alertsTrans');
+var alertsTransmasterModel = mongoose.model('alertsTransInfo', alertsTransmaster, 'alerts_master_gps');
+
 mongoose.Promise = require('bluebird');
 mongoose.connect(connection.connectionString, {
     keepAlive: true,
@@ -54,6 +60,53 @@ function onClientConnected(sock) {
       }
       else { res.json({ "success": true, "errormessage": "" }); }
     });	
+    
+    let query;
+    switch ("key") {
+      case "is less than":
+      query = {
+        alerts_value : {"$lte": "" } //Temperature
+      }
+        break;
+
+      case "is greater than":
+        query = {
+          alerts_value : {"$gte": "" } //Temperature
+        }
+        break;
+  
+        case "is equal to":
+        query = {
+          alerts_value : {"$eq": "" } //Temperature
+        }
+        break;
+    
+      default:
+        break;
+    }
+    
+    
+
+    alertsmasterModel.find(query).sort({"Created_date": -1}).exec(function(err,objBack) {
+      if (err) {
+          // include better error handling here                               
+          return LogError(err, "TCP listner");                        
+        }         
+          let alertsInfo = alertsTransmasterModel(); //Prepare data for save.
+      
+          alertsInfo.save(function(err, doc){
+              if(err){
+                  LogError(err, "TCP listner");
+              }
+              
+              console.log('Trans entry is created');
+              
+          });
+        
+  });
+
+
+    
 
     sock.write(' exit');
   });
