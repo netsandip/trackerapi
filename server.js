@@ -323,10 +323,10 @@ app.post('/getprofilesByUser', function(req, res){
   }
 });
 
-app.post('/getAlertsNotificationByUser', function(req, res){
+app.post('/getAlertsMasterByUser', function(req, res){
   try {
     
-    alertsmasterModel.findOne({userid: userdata.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
+    alertsmasterModel.findOne({userid: req.body.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
         {
             if (err) {
               res.send({ success: false, message: err });
