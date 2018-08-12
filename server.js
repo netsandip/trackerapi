@@ -88,7 +88,7 @@ app.post('/createalertsmaster', function(req, res)
 					if (err) {
             //LogError(err, "createalertsmaster");
             console.log(err);
-						res.status(400).send(err);
+						res.json({ "success": false, "errormessage": "Duplicate entry in the system" });
 					}
 					else { res.json({ "success": true, "errormessage": "" }); }
 				});	
