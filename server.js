@@ -30,7 +30,7 @@ var alertsmaster = require('./dbmodel/alertsmaster');
 var alertsmasterModel = mongoose.model('alertsmasterInfo', alertsmaster, 'alerts_master_gps');
 
 var alertsTransmaster = require('./dbmodel/alertsTrans');
-var alertsmasterModel = mongoose.model('alertsTransInfo', alertsTransmaster, 'alerts_master_gps');
+var alertsTransModel = mongoose.model('alertsTransInfo', alertsTransmaster, 'alerts_trans_gps');
 
 
 app.use(bodyparser.json());
@@ -86,7 +86,8 @@ app.post('/createalertsmaster', function(req, res)
 			if (obj == undefined) {
 				alertsmasterModelInfo.save(function (err) {
 					if (err) {
-						LogError(err, "createalertsmaster");
+            //LogError(err, "createalertsmaster");
+            console.log(err);
 						res.status(400).send(err);
 					}
 					else { res.json({ "success": true, "errormessage": "" }); }
@@ -428,12 +429,12 @@ app.post('/getGraphsDataforSensors', function(req, res) {
     
       case "Last 48 hours":
         end = moment().add(-2, 'days').toDate();
-        interval = {$dayOfMonth: '$Created_date'};
+        interval = {$hour: '$Created_date'};
         break;
       
       case "Last 72 hours":
       end = moment().add(-3, 'days').toDate();
-      interval = {$dayOfMonth: '$Created_date'};
+      interval = {$hour: '$Created_date'};
         break;
 
       case "Last 7 days":
