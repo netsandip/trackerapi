@@ -11,8 +11,9 @@ var cors = require('cors');
 var _ = require('underscore');
 var moment = require('moment');
 var util = require('util');
-var userSchema = require('./dbmodel/users');
-var UserModel = mongoose.model('usersinfo', userSchema, 'users_gps');
+
+var users = require('./middleware/users');
+var alerts = require('./middleware/alerts');
 
 var deviceSchema = require('./dbmodel/device');
 var deviceModel = mongoose.model('deviceInfo', deviceSchema, 'device_gps');
@@ -26,14 +27,14 @@ var shipmentSchemaModel = mongoose.model('shipmentSchemaInfo', shipmentSchema, '
 var shipmenttemplate = require('./dbmodel/shipmenttemplate');
 var shipmenttemplateModel = mongoose.model('shipmenttemplateInfo', shipmenttemplate, 'shipmenttemplate_gps');
 
-var alertsmaster = require('./dbmodel/alertsmaster');
-var alertsmasterModel = mongoose.model('alertsmasterInfo', alertsmaster, 'alerts_master_gps');
-
 var alertsTransmaster = require('./dbmodel/alertsTrans');
 var alertsTransModel = mongoose.model('alertsTransInfo', alertsTransmaster, 'alerts_trans_gps');
-
-
 app.use(bodyparser.json());
+
+app.use('/users', users);
+app.use('/alerts', alerts);
+
+
 app.use(cors());
 
 mongoose.Promise = require('bluebird');
@@ -73,37 +74,6 @@ app.post('/createDevice', function(req, res)
 	}
 });
 
-app.post('/createalertsmaster', function(req, res)
-{
-	try {
-		
-		let alertsdata = req.body;
-
-		let alertsmasterModelInfo = new alertsmasterModel(alertsdata);
-
-		alertsmasterModel.findOne({alerts_master_name: alertsdata.alerts_master_name}, function(err,obj) { 
-			//console.log(obj); 
-			if (obj == undefined) {
-				alertsmasterModelInfo.save(function (err) {
-					if (err) {
-            //LogError(err, "createalertsmaster");
-            console.log(err);
-						res.json({ "success": false, "errormessage": "Duplicate entry in the system" });
-					}
-					else { res.json({ "success": true, "errormessage": "" }); }
-				});	
-			}
-			else
-			{
-				res.json({ "success": false, "errormessage": "alerts name exists in the system" });
-			}		
-		
-		});        
-		
-	} catch (error) {
-		LogError(error, "createalertsmaster");
-	}
-});
 
 
 app.post('/validateLogin', function(req, res)
@@ -121,36 +91,6 @@ app.post('/validateLogin', function(req, res)
 	});
 });
 
-app.post('/createUser', function(req, res)
-{
-	try {
-		
-		var userdata = req.body;
-
-		var userInfo = new UserModel(userdata);
-
-		UserModel.findOne({userid: userdata.userid}, function(err,obj) { 
-			//console.log(obj); 
-			if (obj == undefined) {
-				userInfo.save(function (err) {
-					if (err) {
-						LogError(err, "createUser");
-						res.status(400).send(err);
-					}
-					else { res.json({ "success": true, "errormessage": "" }); }
-				});	
-			}
-			else
-			{
-				res.json({ "success": false, "errormessage": "userid already exists in the system" });
-			}		
-		
-		});        
-		
-	} catch (error) {
-		LogError(error, "createUser");
-	}
-});
 
 
 app.post('/createTemplate', function(req, res)
@@ -300,49 +240,8 @@ app.post('/getShipmentDetailsbyUser', function(req, res){
     console.log(error);
       res.json({ success: false, message: error });
   }
-
-
-      
+     
 });
-
-app.post('/getprofilesByUser', function(req, res){
-  try {
-    
-    UserModel.findOne({userid: req.body.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
-        {
-            if (err) {
-              res.send({ success: false, message: err });
-            } 
-  
-            res.json({ success: true, data: resultss});
-        });
-
-      
-  } catch (error) {
-    console.log(error);
-      res.json({ success: false, message: error });
-  }
-});
-
-app.post('/getAlertsMasterByUser', function(req, res){
-  try {
-    
-    alertsmasterModel.findOne({userid: req.body.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
-        {
-            if (err) {
-              res.send({ success: false, message: err });
-            } 
-  
-            res.json({ success: true, data: resultss});
-        });
-
-      
-  } catch (error) {
-    console.log(error);
-      res.json({ success: false, message: error });
-  }
-});
-
 
 app.post('/getTelemeticsDataByDeviceID', function(req, res){
   try {
