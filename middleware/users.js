@@ -31,7 +31,7 @@ router.post('/getprofilesByUser', function(req, res){
 router.post('/getprofilesByOrganizationname', function(req, res){
     try {
       
-      UserModel.findOne({Organization_name: req.body.Organization_name}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
+      UserModel.find({Organization_name: req.body.Organization_name}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
           {
               if (err) {
                 res.send({ success: false, message: err });
