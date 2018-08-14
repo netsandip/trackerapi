@@ -10,7 +10,26 @@ var alertsmasterModel = mongoose.model('alertsmasterInfo', alertsmaster, 'alerts
 router.post('/getAlertsMasterByUser', function(req, res){
     try {
       
-      alertsmasterModel.findOne({userid: req.body.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
+      alertsmasterModel.find({userid: req.body.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
+          {
+              if (err) {
+                res.send({ success: false, message: err });
+              } 
+    
+              res.json({ success: true, data: resultss});
+          });
+  
+        
+    } catch (error) {
+      console.log(error);
+        res.json({ success: false, message: error });
+    }
+  });
+
+router.post('/getAlertsMasterByID', function(req, res){
+    try {
+      
+      alertsmasterModel.findOne({_id: req.body.id}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
           {
               if (err) {
                 res.send({ success: false, message: err });
