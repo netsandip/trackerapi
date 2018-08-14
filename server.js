@@ -31,11 +31,10 @@ var alertsTransmaster = require('./dbmodel/alertsTrans');
 var alertsTransModel = mongoose.model('alertsTransInfo', alertsTransmaster, 'alerts_trans_gps');
 app.use(bodyparser.json());
 
+app.use(cors());
+
 app.use('/users', users);
 app.use('/alerts', alerts);
-
-
-app.use(cors());
 
 mongoose.Promise = require('bluebird');
 mongoose.connect(connection.connectionString, {
