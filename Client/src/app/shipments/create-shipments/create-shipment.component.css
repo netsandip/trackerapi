@@ -1,0 +1,17 @@
+.row_padding{
+padding-top:10px;
+}
+.txt_css{
+  height: 33px !important;
+    border-radius: 2px;
+    box-shadow: 1px 1px 1px 1px grey;
+}
+.past_date_div{
+  padding-bottom: 15px;
+    border-bottom: 10px solid #ebe8e8;
+}
+.search_icon{
+  position: absolute;
+  padding: 8px;
+  font-size: 15px;
+}

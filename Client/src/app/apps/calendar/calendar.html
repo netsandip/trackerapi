@@ -1,0 +1,75 @@
+<!-- <div class="container-fluid">
+	<ng2-smart-table [settings]="settings" [source]="source" >
+
+    </ng2-smart-table>
+</div> -->
+
+<div class="panel panel-default">
+  <div class="panel-heading"><span style="font-weight: bold;">Tracker List</span>
+  <!-- <select>
+    <option>Tracker</option>
+    <option>ID</option>
+    <option>Battery</option>
+    <option>GPS</option>
+    <option>Frequency</option>
+    <option>Last Connected</option>
+  </select> -->
+  </div>
+
+<div class ="panel-body" style="border:1px solid #6f6a6a85;">
+  <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                <div class="col-lg-2 col-md-2 col-sm-12">
+               Tracker
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12">
+                ID
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12">
+                Battery
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12">
+                GPS
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12">
+                  Frequency
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-12">
+                 Last Connected
+                </div>
+          </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 row_padding" *ngFor="let uShipment of  this.devicelist">
+              <div class="col-lg-2 col-md-2 col-sm-12">
+                {{uShipment.deviceIMEIID}}
+                 </div>
+                 <div class="col-lg-2 col-md-2 col-sm-12">
+                 {{uShipment._id}}
+                 </div>
+                 <div class="col-lg-2 col-md-2 col-sm-12">
+                 Battery
+                 </div>
+                 <div class="col-lg-2 col-md-2 col-sm-12">
+                 GPS
+                 </div>
+                 <div class="col-lg-2 col-md-2 col-sm-12">
+                   {{uShipment.speed}}
+                 </div>
+                 <div class="col-lg-2 col-md-2 col-sm-12">
+                 {{uShipment.UTC_time | date}}
+                 </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 row_padding" *ngIf=" this.devicelist.length==0">
+             No Upcoming shipments
+            </div>
+
+
+
+  </div>
+</div>
+</div>
+
+
+
+</div>

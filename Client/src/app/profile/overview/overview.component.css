@@ -1,0 +1,28 @@
+.row_padding{
+padding:10px;
+}
+.txt_css{
+  height: 33px !important;
+    border-radius: 2px;
+    box-shadow: 1px 1px 1px 1px grey;
+}
+.past_date_div{
+  padding-bottom: 15px;
+    border-bottom: 10px solid #ebe8e8;
+}
+.search_icon{
+  position: absolute;
+  padding: 8px;
+  font-size: 15px;
+}
+.profile_img{
+  border-radius: 50%; max-width: 30%;
+}
+.row_padding_border{
+  padding: 12px;
+  border-bottom: 1px solid #c3baba;
+}
+.bold_txt{
+  font-weight: bold;
+  font-size: 21px;
+}

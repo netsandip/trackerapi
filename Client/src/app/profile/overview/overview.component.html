@@ -1,0 +1,184 @@
+        <div  style="padding-left: 0px;">
+<div class="col-md-12 col-sm-12 col-lg-12 row_padding">
+    <ul  class="nav nav-pills">
+        <li><a>Profile</a> </li>
+        <li>
+          <a  href="#overview" class="active" data-toggle="tab">Overview</a>
+        </li>
+        <li><a href="#setting" data-toggle="tab">Setting</a>
+        </li>
+
+  </ul>
+</div>
+          <div class="col-md-12 col-sm-12 col-lg-12 row_padding">
+              <div class="tab-content clearfix" style="width:100%">
+                  <div class="tab-pane active" id="overview">
+                  <div class="panel panel-default">
+                  <div class ="panel-body" style="border: 1px solid #cac5c585; padding-bottom: 0px;">
+                  <div class="row past_date_div">
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                      <div class="col-lg-2 col-md-2 col-sm-12" style="text-align: center;">
+                          <img class="profile_img img-fluid" src="assets/images/user.jpg">
+                      </div>
+                        <div class="col-lg-10 col-md-10 col-sm-12">
+                            <div class="col-lg-12 col-md-12 col-sm-12 row_padding bold_txt">
+                             {{userProfileData.Name}}
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+
+                              <div class="col-lg-2 col-md-2 col-sm-12">
+                                  Company
+                              </div>
+                              <div class="col-lg-9 col-md-9 col-sm-12">
+
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                              <div class="col-lg-2 col-md-2 col-sm-12">
+                                  Business Unit
+                              </div>
+                              <div class="col-lg-9 col-md-9 col-sm-12">
+
+                                </div>
+
+                              </div>
+                              <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                  <div class="col-lg-2 col-md-2 col-sm-12">
+                                      Email:
+                                  </div>
+                                  <div class="col-lg-9 col-md-9 col-sm-12">
+                                      {{userProfileData.EmailAddress}}
+                                    </div>
+
+                              </div>
+                              <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                  <div class="col-lg-2 col-md-2 col-sm-12">
+                                      Phone:
+                                  </div>
+                                  <div class="col-lg-9 col-md-9 col-sm-12">
+                                      {{userProfileData.PhoneNumber}}
+                                    </div>
+
+                              </div>
+                              <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                  <div class="col-lg-2 col-md-2 col-sm-12">
+                                      TimeZone:
+                                  </div>
+                                  <div class="col-lg-9 col-md-9 col-sm-12">
+                                      {{userProfileData.Created_date}}
+                                    </div>
+
+                              </div>
+                              <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                <div class="col-lg-2 col-md-2 col-sm-12">
+                                  <a href="#setting" data-toggle="tab">Update Profile Setting</a>
+                                </div>
+                                <div class="col-lg-9 col-md-9 col-sm-12">
+
+                                  </div>
+
+                            </div>
+                        </div>
+
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding"></div>
+                 </div>
+            <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-12 row_padding" style="padding: 3%">
+                          <div class="row_padding bold_txt">Contact Supports</div>
+                          <div class="row_padding">
+                            If you are encountering issues managing devices, your team or account information, please reach out and we will assist you directly
+                          <br>  <a href="#" data-toggle="tab">Contact Supports</a>
+
+                          </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 row_padding" style="border-left: 10px solid #ebe8e8; padding: 3%">
+                        <div class="row_padding bold_txt">Report a problem</div>
+                          <div class="row_padding">Please report a problem is you notice something out of the ordinary. Your help in improving the Tive experience is greatly appreciated. Thank you.
+                             <br> <a href="#" data-toggle="tab">Reports a Problem</a>
+                          </div>
+
+                </div>
+
+
+
+              </div>
+          </div>
+       </div>
+      </div>
+
+
+      <div class="tab-pane" id="setting">
+          <div class="panel panel-default">
+              <div class="panel panel-default">
+                  <div class ="panel-heading">Profile Setting</div>
+                  <div class ="panel-body" style="">
+                  <div class="row past_date_div">
+                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding_border">
+                      <div class="col-lg-2 col-md-2 col-sm-12">
+                          Name
+                      </div>
+                      <div class="col-lg-9 col-md-9 col-sm-12">
+                          {{userProfileData.Name}}
+                        </div>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding_border">
+                      <div class="col-lg-2 col-md-2 col-sm-12">
+                          Position
+                      </div>
+                      <div class="col-lg-9 col-md-9 col-sm-12">
+                          <!-- {{userProfileData.Name}} -->
+                        </div>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding_border">
+                      <div class="col-lg-2 col-md-2 col-sm-12">
+                          Email Address
+                      </div>
+                      <div class="col-lg-9 col-md-9 col-sm-12">
+                          {{userProfileData.EmailAddress}}
+                        </div>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding_border">
+                      <div class="col-lg-2 col-md-2 col-sm-12">
+                          Phone:
+                      </div>
+                      <div class="col-lg-9 col-md-9 col-sm-12">
+                          {{userProfileData.PhoneNumber}}
+                        </div>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding_border">
+                      <div class="col-lg-2 col-md-2 col-sm-12">
+                          TimeZone:
+                      </div>
+                      <div class="col-lg-9 col-md-9 col-sm-12">
+                          {{userProfileData.Created_date}}
+                        </div>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding_border">
+                      <div class="col-lg-2 col-md-2 col-sm-12">
+                          Password:
+                      </div>
+                      <div class="col-lg-9 col-md-9 col-sm-12">
+                          <!-- {{userProfileData.Created_date}} -->
+                        </div>
+                  </div>
+                 </div>
+                <div class="row">
+                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                          <div style="font-weight: bold;">Notification</div>
+                          <div>Contact Supports Contact SupportsContact SupportsContact Supports Contact Supports Contact Supports Contact Supports</div>
+                  </div>
+
+
+              </div>
+          </div>
+       </div>
+         </div>
+      </div>
+     </div>
+    </div>
+  </div>
+
+
+
+

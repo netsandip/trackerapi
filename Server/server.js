@@ -16,7 +16,7 @@ var users = require('./middleware/users');
 var alerts = require('./middleware/alerts');
 
 
-var userSchema = require('../dbmodel/users');
+var userSchema = require('./dbmodel/users');
 var UserModel = mongoose.model('usersinfo', userSchema, 'users_gps');    
 
 var deviceSchema = require('./dbmodel/device');

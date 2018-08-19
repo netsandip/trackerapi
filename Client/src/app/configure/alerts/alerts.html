@@ -1,0 +1,262 @@
+<div class="container-fluid" style="padding-top: 10px;">
+<div class="col-md-12 col-sm-12 col-lg-12">
+  <div class="panel panel-default" *ngIf="!isProfilePageVisiable" [ngClass]="{ 'alertlistdiv': islistshowing, 'col-md-8':islistshowing}">
+    <div class ="panel-heading" style="height: 60px;">
+      Alert Profile
+      <input type="button" class="btn btn-success pull-right" value="Create New Profile"  (click)="ShowProfile()"/>
+    </div>
+
+    <div class ="panel-body">
+        <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+            <div class="col-md-6">Profile Name</div>
+            <div class="col-md-3">Assignees</div>
+            <div class="col-md-3">Modified</div>
+         </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 row_padding"  *ngFor="let profilelist of alertProfileList">
+              <div class="col-md-6" style ="cursor: pointer;" (click)=showalertProfileData(profilelist._id) >{{profilelist.alerts_master_name}}</div>
+              <div class="col-md-3"><img class="profile-img img-fluid img_css" src="assets/images/user.jpg" ></div>
+              <div class="col-md-3">{{profilelist.Created_date | date}}</div>
+           </div>
+
+    </div>
+
+</div>
+<div class="panel panel-default col-md-4" *ngIf="islistshowing">
+
+
+  <div class ="panel-body">
+      <div style="height: 45px;" class="row row_padding">
+        <div class="col-md-8">{{getalertsProfileData.alerts_master_name}}</div>
+        <div class="col-md-2"> <a class="Edit_btn">Edit</a></div>
+        <div class="col-md-2">  <a class="close_btn" (click)=closemodal()>Close</a> </div>
+
+
+          <!-- <input type="button" class="btn btn-success pull-right" value="Create New Profile"  (click)="ShowProfile()"/> -->
+        </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+
+        <div class="col-md-3">Descrption</div>
+        <div class="col-md-9">{{getalertsProfileData.description}}</div>
+     </div>
+     <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+
+      <div class="col-md-3">Departure</div>
+      <div class="col-md-9" *ngIf="getalertsProfileData.shipment_departs_origin">  Notify when shipment departs origin address</div>
+      <div class="col-md-9" *ngIf="!getalertsProfileData.shipment_departs_origin">   No Alert</div>
+   </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">Arrival</div>
+          <div class="col-md-9" *ngIf="getalertsProfileData.shipment_arrives_destination">    Notify when shipment arrives at destination address</div>
+          <div class="col-md-9" *ngIf="!getalertsProfileData.shipment_arrives_destination">   No Alert</div>
+
+       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">ETA</div>
+          <div class="col-md-9">No Alert</div>
+       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">Stops</div>
+          <div class="col-md-9" *ngIf="getalertsProfileData.shipment_stops">{{getalertsProfileData.shipment_stops}}</div>
+          <div class="col-md-9" *ngIf="!getalertsProfileData.shipment_stops">No Alerts</div>
+       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">Geofences</div>
+          <div class="col-md-9"></div>
+       </div>
+
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">Temperature</div>
+          <div class="col-md-9">Min: {{getalertsProfileData.temperature_min}} </div>
+          <div class="col-md-3"></div>
+          <div class="col-md-9">Max: {{getalertsProfileData.temperature_max}}</div>
+       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">Humidity</div>
+          <div class="col-md-9">Min:{{getalertsProfileData.humidity_min}}</div>
+          <div class="col-md-3"></div>
+          <div class="col-md-9">Max: {{getalertsProfileData.humidity_max}}</div>
+       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">Shock Events</div>
+          <div class="col-md-9"  *ngIf="!getalertsProfileData.shock_events">Shock events are disabled </div>
+          <div class="col-md-9"  *ngIf="getalertsProfileData.shock_events">Shock events are enabled </div>
+
+       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">Connection</div>
+          <div class="col-md-9">No Alert</div>
+       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">Battery</div>
+          <div class="col-md-9">Min: {{getalertsProfileData.battery_min}} </div>
+          <div class="col-md-3"></div>
+          <div class="col-md-9">Max: {{getalertsProfileData.battery_max}}</div>
+       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">User Assignees</div>
+          <div class="col-md-9">{{getalertsProfileData.assignee_email[0]}}</div>
+       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">External User Assignees</div>
+          <div class="col-md-9"> {{getalertsProfileData.external_users[0]}}</div>
+       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">Webhook Push Notification(s)</div>
+          <div class="col-md-9">No Alert</div>
+       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">Created</div>
+          <div class="col-md-9">{{getalertsProfileData.Created_date | date}}</div>
+       </div>
+       <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+          <div class="col-md-3">Modified</div>
+          <div class="col-md-9">{{getalertsProfileData.Created_date | date}}</div>
+       </div>
+</div>
+</div>
+</div>
+
+
+<div class="panel panel-default" *ngIf="isProfilePageVisiable">
+    <div class ="panel-heading" style="height: 60px;">
+     Create New Alert Profile
+      <!-- <input type="button" class="btn btn-defaults pull-right" value="Back" /> -->
+    </div>
+    <form [formGroup]="alertProfileForm">
+    <div class ="panel-body">
+
+        <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
+            <div class="col-md-3 txt_align_center">Profile Name</div>
+            <div class="col-md-9"><input type="text" class="form-control" formControlName="alerts_master_name" [(ngModel)]="alertsProfileData.alerts_master_name"/></div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+            <div class="col-md-3 txt_align_center">Description</div>
+            <div class="col-md-9">
+            <textarea class="txtarea" rows="5" formControlName="description" [(ngModel)]="alertsProfileData.description">
+
+            </textarea>
+          </div>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+          <div class="col-md-12">Shipment Alerts</div>
+          <div class="col-md-12">
+          <input type="checkbox" formControlName="shipment_departs_origin" [(ngModel)]="alertsProfileData.shipment_departs_origin"> Notify when shipment departs origin address
+        </div>
+        <div class="col-md-12">
+          <input type="checkbox" formControlName="shipment_arrives_destination" [(ngModel)]="alertsProfileData.shipment_arrives_destination" > Notify when shipment arrives at destination address
+        </div>
+
+          <div class="col-md-3"><input type="checkbox" >Alert if shipment delivery will be later than ETA by </div>
+          <div class="col-md-9 row_btm_padding">
+            <input type="text" class="form-control" formControlName="shipment_late_delivery" [(ngModel)]="alertsProfileData.shipment_late_delivery" />
+          </div>
+
+            <div class="col-md-3"><input type="checkbox" >Notify if active shipment stops for more than</div>
+            <div class="col-md-9 row_btm_padding">
+              <input type="text" class="form-control" formControlName="shipment_stops" [(ngModel)]="alertsProfileData.shipment_stops"/>
+            </div>
+
+      </div>
+      <!-- <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+          <div class="col-md-8">Geofence</div>
+          <div class="col-md-4">
+          <a>Add Geofence</a>
+        </div>
+      </div> -->
+      <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+      <div class="col-lg-3 col-md-3 col-sm-12 txt_align_center ">
+          Temperature
+      </div>
+      <div class="col-lg-9 col-md-9 col-sm-12 ">
+          <ng5-slider [(value)]="tempvalue"  highValue="100" [options]="tempoptions"  ></ng5-slider>
+      </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+      <div class="col-lg-3 col-md-3 col-sm-12 txt_align_center">
+          Humidity
+      </div>
+      <div class="col-lg-9 col-md-9 col-sm-12">
+          <ng5-slider [(value)]="humvalue"  highValue="100" [options]="humoptions"></ng5-slider>
+      </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+        <div class="col-lg-3 col-md-3 col-sm-12 txt_align_center ">
+            Shocks Events
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-12 ">
+            <input type="checkbox" formControlName="shock_events" [(ngModel)]="alertsProfileData.shock_events" />Alert if tracker experiences a shock events
+        </div>
+      </div>
+
+      <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+          <div class="col-lg-3 col-md-3 col-sm-12 txt_align_center ">
+              Battery Power
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 ">
+              <ng5-slider [(value)]="batteryvalue"  highValue="100" [options]="batteryoptions"></ng5-slider>
+          </div>
+        </div>
+
+      <div class="col-md-12 col-sm-12 col-lg-12 row_padding" style="margin-top: 1%;">
+      <div class="col-lg-3 col-md-3 col-sm-12 txt_align_center ">
+          User Assignee(s)
+        </div>
+        <div class="col-lg-9 col-md-9 col-sm-12">
+         <select class="col-md-12" style="height: 35px;" formControlName="assignee_email" [(ngModel)]="alertsProfileData.assignee_email">
+           <option value="sandeep@test.com">Sandeep Krishna</option>
+         </select>
+        </div>
+      </div>
+      <div class="col-md-12 col-sm-12 col-lg-12 row_padding" style="margin-top: 1%;">
+        <div class="col-lg-3 col-md-3 col-sm-12 txt_align_center ">
+          External  User Assignee(s)
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-12 ">
+           <select class="col-md-12" style="height: 35px;" formControlName="external_users" [(ngModel)]="alertsProfileData.external_users">
+              <option value="sandeep@test.com">Sandeep Krishna</option>
+           </select>
+          </div>
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-lg-12 row_padding" style="margin-top: 1%;">
+            <div class="col-lg-3 col-md-3 col-sm-12 txt_align_center ">
+
+              </div>
+              <div class="col-lg-9 col-md-9 col-sm-12 ">
+              <input type="submit" value="Save and Close" class="btn btn-success" (click)="SaveAlertProfile()">
+              <input type="button" value="Close" class="btn btn-defaults" (click)="ShowProfile()">
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-12 txt_align_center ">
+
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-12 ">
+               {{msgtxt}}
+                </div>
+            </div>
+    </div>
+    </form>
+</div>
+
+</div>
+
+
+<!-- Modal -->
+<!-- <div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div> -->

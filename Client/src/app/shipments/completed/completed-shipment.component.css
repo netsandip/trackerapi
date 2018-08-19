@@ -1,0 +1,40 @@
+
+
+
+
+    .row_padding{
+      padding-top:10px;
+      color: #2d2121;
+      }
+      .searchtxt_css{
+          height: 33px !important;
+          border-radius: 2px;
+          padding-left: 20px;
+      }
+      .txt_css{
+        height: 33px !important;
+          border-radius: 2px;
+          /* box-shadow: 1px 1px 1px 1px grey; */
+      }
+      .past_date_div{
+        /* padding-bottom: 15px;
+          border-bottom: 5px solid #ebe8e8; */
+      }
+      .search_icon{
+        position: absolute;
+        padding: 8px;
+        font-size: 15px;
+      }
+      .inner_div{
+        background-color: white;
+        padding-top: 1%;
+        box-shadow: 5px 5px 5px 5px #bbadad;
+        border: 1px solid #bbadad;
+        padding-bottom: 2%;
+        /* min-height: 630px; */
+      }
+      .header_txt{
+        color: #3e3636;
+        font-size: 17px;
+        font-weight: 600;
+      }

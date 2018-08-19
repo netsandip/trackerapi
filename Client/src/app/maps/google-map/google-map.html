@@ -1,0 +1,342 @@
+
+<div class="" style="padding-left: 0px;">
+     <div class="col-lg-12 col-md-12 col-sm-12 inner_div" [hidden]="showdevicedetails">
+        <div class="col-md-2" style="padding: 0px;">
+        <!-- <div class="col-lg-12 col-md-12 col-sm-12" style = "margin-right: -14%;"> -->
+                <div class="side_menu" *ngIf="devicelist">
+                    <img src="assets/images/logo/search.png" class="search_icon" />
+                    <input type="text" class="form-control search_txt" placeholder="search device" (keyup)="searchdevice(searchtxt)" [(ngModel)]="searchtxt" />
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 side_menu" style="padding: 10px;" *ngIf="devicelist">
+                        <span>{{devicelist.length}} of </span>  <span>{{devicelist.length}}  devices </span>
+                </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 side_menu" *ngFor="let device of devicelist;">
+            <ul class="devicelist_ul" (click)="getdevicedetails(device.deviceIMEIID)">
+                <li><span style="font-size: 11px;font-weight: bold;">{{device.deviceIMEIID}}</span> </li>
+                <li> {{device.address}}</li>
+                <li> {{device.hourdifference| number : '1.2-2'}} hour ago </li>
+            </ul>
+        </div>
+        <!-- </div> -->
+        </div>
+        <div class="col-md-10 pull-right" style="border-left: 1px solid #d4d1d1;">
+                <agm-map #AgmMap
+                [latitude]="latitude"
+                [longitude]="longitude"
+                [zoom]="zoom"
+                [disableDefaultUI]="false"
+                [zoomControl]="true"
+                >
+
+            <agm-marker
+                *ngFor="let m of markers; let i = index"
+                (markerClick)="getdevicedetails(m.label)"
+                [latitude]="m.lat"
+                [longitude]="m.lng"
+                [label]="m.label"
+                [markerDraggable]="m.draggable">
+
+            <agm-info-window>
+              <strong>{{m.label}}</strong>
+            </agm-info-window>
+            </agm-marker>
+
+
+      </agm-map>
+        </div>
+    </div>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 inner_div" [hidden]="!showdevicedetails">
+        <div class="col-md-12" style="padding: 8px 27px 8px 8px;">
+                <div class="col-md-2">
+                        {{selecteddeviceid}}
+                </div>
+                <div class="col-md-8">
+                  <ul  class="nav nav-pills">
+                        <li>
+                          <a  href="#1a" data-toggle="tab" class="active">Status</a>
+                        </li>
+                        <li><a href="#2a" data-toggle="tab">Alerts</a>
+                        </li>
+                        <li><a href="#3a" data-toggle="tab">Reports</a>
+                        </li>
+                        <li><a href="#4a" data-toggle="tab">Details</a>
+                        </li>
+                  </ul>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control" (change)="onRangeChange($event.target.value)" style="height: 35px">
+                        <option *ngFor="let data of datarangelist;">{{data.text}}</option>
+                    </select>
+                </div>
+
+        </div>
+
+        <div class="tab-content clearfix" style="width:100%">
+            <div class="tab-pane active" id="1a">
+                <div class="col-md-12 col-sm-12 col-lg-12" style="border-top: 1px solid #efe6e6;">
+                    <div class="col-md-2" style="padding: 0px;" >
+                    <div class="col-md-12"style="padding: 0px;">
+                            <ul class="devicelist_ul">
+                                    <li class="side_menu2" style="text-align: center;">
+                                        <span class="back_btn">
+                                            <a  (click)="goback()">Back</a>
+                                        </span>
+                                        <span style="font-size: 11px;font-weight: bold; display:inherit">{{selecteddevicedetails.UTC_time | date:'medium'}}
+
+                                        </span>
+                                    <span>( {{selecteddevicedetails.hourdifference | number : '1.2-2'}} hour ago) </span>
+                                    </li>
+                                    <li class="side_menu2"><span>Location</span> <br/>
+                                        <span style="font-weight: bold;color: black;">
+                                        {{selecteddevicedetails.address}}
+                                       </span>
+                                    </li>
+                                    <li class="side_menu2"> Sensor </li>
+                                    <li (click)="showSensorGraph('temp')" >
+                                        <div class="col-md-12 sensor_div">
+                                            <div class="col-md-4">
+                                                Temperature (F) {{LTemperature}}
+                                            </div>
+                                            <div class="col-md-8">
+                                                    <canvas baseChart height="120" [datasets]="lineChartDataForTemp" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+
+                                            </div>
+                                        </div>
+                                        </li>
+                                    <li (click)="showSensorGraph('humidity')">
+                                            <div class="col-md-12 sensor_div">
+                                                    <div class="col-md-4">
+                                                        Humidity (%) {{Lhumidity}}
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                            <canvas baseChart height="120" [datasets]="lineChartDataForHumidity" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+                                                     </div>
+                                                </div>
+                                        </li>
+                                        <li (click)="showSensorGraph('pressure')" >
+                                            <div class="col-md-12 sensor_div">
+                                                    <div class="col-md-4">
+                                                        Pressure (PSL) {{LPressure}}
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                            <canvas baseChart height="120" [datasets]="lineChartDataForPressure" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+                                                        </div>
+                                             </div>
+                                        </li>
+                                    <li (click)="showSensorGraph('light')">
+                                            <div class="col-md-12 sensor_div">
+                                                    <div class="col-md-4">
+                                                        Light (lux) {{LLight}}
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                            <canvas baseChart height="120" [datasets]="lineChartDataForLight" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+                                                        </div>
+                                             </div>
+                                   </li>
+                                    <li (click)="showSensorGraph('motion')">
+                                            <div class="col-md-12 sensor_div">
+                                                    <div class="col-md-4">
+                                                        Motion Activity {{LmotionActivity}}
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                            <canvas baseChart height="120" [datasets]="lineChartDataFormotionActivity" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+                                                        </div>
+                                             </div>
+                                    </li>
+                                    <li (click)="showSensorGraph('xyz_accelaration')">
+                                      <div class="col-md-12 sensor_div">
+                                              <div class="col-md-4">
+                                                XYZ Acceleration {{LXYZ_Acceleration}}
+                                              </div>
+                                              <div class="col-md-8">
+                                                      <canvas baseChart height="120" [datasets]="lineChartDataForXYZAcceleration" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+                                                  </div>
+                                       </div>
+                                   </li>
+                                  <li (click)="showSensorGraph('acceleration')">
+                                        <div class="col-md-12 sensor_div">
+                                                <div class="col-md-4">
+                                                    Acceleration {{LAcceleration}}
+                                                </div>
+                                                <div class="col-md-8">
+                                                        <canvas baseChart height="120" [datasets]="lineChartDataForAcceleration" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+                                                    </div>
+                                         </div>
+                                   </li>
+
+                                </ul>
+
+                    </div>
+                    </div>
+                    <div class="right_div col-md-10 pull-right">
+                      <div class="col-md-12" style="padding: 3%;">
+<div class="col-md-12" *ngIf= "datatext=='temp'" style="min-height:150px">
+        <canvas baseChart height="90" [datasets]="lineChartDataForTemp" [labels]="lineChartLabels" [options]="lineChartOptionsanother" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+</div>
+<div class="col-md-12" *ngIf= "datatext=='humidity'" style="min-height:150px">
+  <canvas baseChart height="90" [datasets]="lineChartDataForHumidity" [labels]="lineChartLabels" [options]="lineChartOptionsanother" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+</div>
+<div class="col-md-12" *ngIf= "datatext=='pressure'" style="min-height:150px">
+<canvas baseChart height="90" [datasets]="lineChartDataForPressure" [labels]="lineChartLabels" [options]="lineChartOptionsanother" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+</div>
+<div class="col-md-12" *ngIf= "datatext=='light'" style="min-height:150px">
+<canvas baseChart height="90" [datasets]="lineChartDataForLight" [labels]="lineChartLabels" [options]="lineChartOptionsanother" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+</div>
+<div class="col-md-12" *ngIf= "datatext=='motion'" style="min-height:150px">
+  <canvas baseChart height="90" [datasets]="lineChartDataFormotionActivity" [labels]="lineChartLabels" [options]="lineChartOptionsanother" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+</div>
+<div class="col-md-12" *ngIf= "datatext=='xyz_accelaration'" style="min-height:150px">
+  <canvas baseChart height="90" [datasets]="lineChartDataForXYZAcceleration" [labels]="lineChartLabels" [options]="lineChartOptionsanother" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+ </div>
+<div class="col-md-12" *ngIf= "datatext=='acceleration'" style="min-height:150px">
+  <canvas baseChart height="90" [datasets]="lineChartDataForAcceleration" [labels]="lineChartLabels" [options]="lineChartOptionsanother" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
+</div>
+</div>
+                        <div class="col-md-12">
+                            <agm-map #AgmMap
+                            [latitude]="latitude"
+                            [longitude]="longitude"
+                            [zoom]="zoom"
+                            [disableDefaultUI]="false"
+                            [zoomControl]="true"
+                            style="height:700px">
+                            <ng-container>
+                            <agm-polyline *ngFor="let point of polyline;let i = index;"  [strokeColor]="point.speed < 50 ? '#2196f3': 'red'">
+                              <agm-polyline-point [latitude]="point.latitude" [longitude]="point.longitude">
+                              </agm-polyline-point>
+                              <ng-container *ngIf="polyline[i+1]">
+                                  <agm-polyline-point [latitude]="polyline[i+1].latitude" [longitude]="polyline[i+1].longitude">
+                                  </agm-polyline-point>
+                              </ng-container>
+                            </agm-polyline>
+                            </ng-container>
+                            </agm-map>
+                    </div>
+                  </div>
+                  </div>
+            </div>
+            <div class="tab-pane" id="2a">
+                <div class="col-md-12 col-sm-12 col-lg-12" style="border-top: 1px solid #efe6e6;">
+                    <div class="col-md-2" style="padding: 0px;" >
+                    <div class="row" style="margin-right: 0%;">
+                    <div class="col-md-12" style="padding: 0px;">
+                        <ul  class="nav nav-pills">
+                            <li>
+                              <a  class="active"  href="#A1" data-toggle="tab" (click)="showEventDiv()">Events</a>
+                            </li>
+                            <li><a href="#A2" data-toggle="tab" (click)="showconfigureDiv()">Configure</a>
+                            </li>
+                      </ul>
+
+                    </div>
+                    <div class="tab-content clearfix" style="width:100%; padding-top:5%">
+                          <div class="tab-pane active" id="A1">
+                            <div class="left_alert"  *ngFor="let uShipment of items">
+                            <div class="parameter_div"> Location Parameter1 </div>
+                            <div class="arrival_div">On Arrival | ASW Arrival</div>
+                            <div class="date_div"> July 19, 16:17 PM </div>
+                            </div>
+                          </div>
+                          <div class="tab-pane" id="A2">
+                              <div class="left_alert">
+                                  <div class="parameter_div" style="padding: 6%;"> Alert Profile <a  class="pull-right" (click)="gotoAlertPage()"> Apply Alert Profile</a> </div>
+                              </div>
+                              <div class="left_alert"  *ngFor="let alertProfile of alertProfileList">
+                              <div class="parameter_div" (click)=showalertProfileData(alertProfile._id)> {{alertProfile.alerts_master_name}} </div>
+                              <div class="arrival_div">{{alertProfile.assignee_email[0]}}</div>
+                              <div class="date_div"> {{alertProfile.Created_date | date}} </div>
+                            </div>
+                          </div>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="right_div col-md-10 pull-right" style="border-left: 1px solid #e4e1e1;">
+                        <div class="col-md-12"  style="display: block" *ngIf="!showConfigDiv">
+                            <canvas baseChart
+                          [datasets]="barChartData"
+                          [labels]="barChartLabels"
+                          [options]="barChartOptions"
+                          [legend]="barChartLegend"
+                          [chartType]="barChartType"
+                          (chartHover)="chartHovered($event)"
+                          (chartClick)="chartClicked($event)"></canvas>
+                       </div>
+                       <div class="col-md-12"  style="display: block"  *ngIf="showConfigDiv">
+                          <div class="col-md-12 col-sm-12 col-lg-12 row_padding">
+                              <div class="panel panel-default">
+                                  <div class ="panel-heading">{{getalertsProfileData.alerts_master_name}}</div>
+                                  <form>
+                                  <div class ="panel-body">
+
+                                          <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                            <div class="col-md-2">Description</div>
+                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
+                                         </div>
+                                         <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                            <div class="col-md-2">User Assignees</div>
+                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
+                                         </div>
+                                         <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                            <div class="col-md-2">External User Assignees</div>
+                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
+                                         </div>
+                                         <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                            <div class="col-md-2">Webhook Push Notification(s)</div>
+                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
+                                         </div>
+                                         <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                            <div class="col-md-2">Created</div>
+                                            <div class="col-md-10">Date</div>
+                                         </div>
+                                         <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                            <div class="col-md-2">Modified</div>
+                                            <div class="col-md-10">Date</div>
+                                         </div>
+
+                                  </div>
+                                  </form>
+                              </div>
+
+
+
+                              <div class="panel panel-default">
+                                  <div class ="panel-heading">Shipment Alerts</div>
+                                  <form>
+                                  <div class ="panel-body">
+
+                                          <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                            <div class="col-md-2">Departure</div>
+                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
+                                         </div>
+                                         <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                            <div class="col-md-2">Arrival</div>
+                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
+                                         </div>
+                                         <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                            <div class="col-md-2">ETA</div>
+                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
+                                         </div>
+
+
+                                  </div>
+                                  </form>
+                              </div>
+                          </div>
+                       </div>
+                  </div>
+                  </div>
+
+            </div>
+            <div class="tab-pane" id="3a">
+              <h3>We applied clearfix to the tab-content to rid of the gap between the tab and the content</h3>
+            </div>
+              <div class="tab-pane" id="4a">
+              <h3>We use css to change the background color of the content to be equal to the tab</h3>
+            </div>
+          </div>
+
+    </div>
+</div>
+
+

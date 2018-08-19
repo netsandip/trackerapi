@@ -1,0 +1,35 @@
+.row_padding{
+  padding-bottom: 2%;
+  border-bottom: 1px solid #f1eded;
+}
+.img_css{
+  border-radius: 50%;
+  max-width: 15%;
+}
+.txtarea{
+  width: 100%;
+  border: 1px solid #a29696;
+  border-radius: 2px;
+  box-shadow: none;
+  font-size: 14px;
+  color: #888da8;
+}
+
+.txt_align_center{
+  text-align: center
+}
+.row_btm_padding{
+  padding-bottom: 2%
+}
+
+.form-control{
+  border-color: #a29696;
+}
+.alertlistdiv{
+  /* width:70%; */
+}
+.close_btn, .Edit_btn{
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+}
