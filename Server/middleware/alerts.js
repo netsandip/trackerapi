@@ -7,6 +7,10 @@ var router = express.Router();
 var alertsmaster = require('../dbmodel/alertsmaster');
 var alertsmasterModel = mongoose.model('alertsmasterInfo', alertsmaster, 'alerts_master_gps');
 
+var alertsTransmaster = require('../dbmodel/alertsTrans');
+var alertsTransmasterModel = mongoose.model('alertsTransInfo', alertsTransmaster, 'alerts_trans_gps');
+
+
 router.post('/getAlertsMasterByUser', function(req, res){
     try {
       
@@ -94,6 +98,25 @@ router.post('/createalertsmaster', function(req, res)
 	} catch (error) {
 		LogError(error, "createalertsmaster");
 	}
+});
+
+router.post('/getEventsAlertsByUser', function(req, res){
+  try {
+    
+    alertsTransmasterModel.find({userid: req.body.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
+        {
+            if (err) {
+              res.send({ success: false, message: err });
+            } 
+  
+            res.json({ success: true, data: resultss});
+        });
+
+      
+  } catch (error) {
+    console.log(error);
+      res.json({ success: false, message: error });
+  }
 });
 
 module.exports = router
