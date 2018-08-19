@@ -19,7 +19,7 @@ alertsMasterSchema = mongoose.Schema({
     battery_min: Number,   
     battery_max: Number,   
     shock_events: Boolean,
-    lost_recovered_connection: String,
+    lost_recovered_connection: Boolean,
     assignee_email: [],
     external_users: [],
     userid: String,

@@ -51,12 +51,30 @@ router.post('/createalertsmaster', function(req, res)
 	try {
 		
 		let alertsdata = req.body;
+    
+    let objAlerts = {
+      alerts_master_name: alertsdata.alerts_master_name,
+      shipment_departs_origin: alertsdata.shipment_departs_origin,
+      shipment_arrives_destination: alertsdata.shipment_arrives_destination,
+      shipment_late_delivery: alertsdata.shipment_late_delivery,
+      shipment_stops: alertsdata.shipment_stops,
+      geofenced_areas: alertsdata.geofenced_areas,
+      temperature_min: alertsdata.temperature_min,
+      temperature_max: alertsdata.temperature_max,
+      humidity_min: alertsdata.humidity_min,   
+      humidity_max: alertsdata.humidity_max,   
+      battery_min: alertsdata.battery_min,   
+      battery_max: alertsdata.battery_max,   
+      shock_events: alertsdata.shock_events,
+      lost_recovered_connection: alertsdata.lost_recovered_connection,
+      assignee_email: alertsdata.assignee_email,
+      external_users: alertsdata.external_users,
+    };
 
-		let alertsmasterModelInfo = new alertsmasterModel(alertsdata);
-
-		alertsmasterModel.findOne({alerts_master_name: alertsdata.alerts_master_name}, function(err,obj) { 
-			//console.log(obj); 
+		alertsmasterModel.findOneAndUpdate({alerts_master_name: alertsdata.alerts_master_name}, objAlerts, function(err,obj) { 
+			console.log(obj); 
 			if (obj == undefined) {
+        let alertsmasterModelInfo = new alertsmasterModel(alertsdata);
 				alertsmasterModelInfo.save(function (err) {
 					if (err) {
             //LogError(err, "createalertsmaster");
@@ -68,7 +86,7 @@ router.post('/createalertsmaster', function(req, res)
 			}
 			else
 			{
-				res.json({ "success": false, "errormessage": "alerts name exists in the system" });
+				res.json({ "success": true, "errormessage": "record is updated!!" });
 			}		
 		
 		});        
