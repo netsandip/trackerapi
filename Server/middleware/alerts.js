@@ -14,7 +14,7 @@ var alertsTransmasterModel = mongoose.model('alertsTransInfo', alertsTransmaster
 router.post('/getAlertsMasterByUser', function(req, res){
     try {
       
-      alertsmasterModel.find({userid: req.body.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
+      alertsmasterModel.find({userid: req.body.userid}).sort({ 'Created_date': -1 }).limit(100).exec( function (err, resultss)
           {
               if (err) {
                 res.send({ success: false, message: err });
@@ -103,7 +103,7 @@ router.post('/createalertsmaster', function(req, res)
 router.post('/getEventsAlertsByUser', function(req, res){
   try {
     
-    alertsTransmasterModel.find({userid: req.body.userid}).sort({ 'Created_date': -1 }).exec( function (err, resultss)
+    alertsTransmasterModel.find({userid: req.body.userid}).sort({ 'Created_date': -1 }).limit(100).exec( function (err, resultss)
         {
             if (err) {
               res.send({ success: false, message: err });
