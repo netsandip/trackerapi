@@ -24,6 +24,7 @@ alertsMasterSchema = mongoose.Schema({
     external_users: [],
     userid: String,
     updated_date : Date,
+    deviceIMEIID: Number,
     Created_date : { type : Date, default: Date.now }
 });
 

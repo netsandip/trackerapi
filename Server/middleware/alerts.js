@@ -30,6 +30,25 @@ router.post('/getAlertsMasterByUser', function(req, res){
     }
   });
 
+  router.post('/getAlertsMasterByDeviceID', function(req, res){
+    try {
+      
+      alertsmasterModel.find({deviceIMEIID: req.body.deviceid}).sort({ 'Created_date': -1 }).limit(100).exec( function (err, resultss)
+          {
+              if (err) {
+                res.send({ success: false, message: err });
+              } 
+    
+              res.json({ success: true, data: resultss});
+          });
+  
+        
+    } catch (error) {
+      console.log(error);
+        res.json({ success: false, message: error });
+    }
+  });
+
 router.post('/getAlertsMasterByID', function(req, res){
     try {
       
@@ -100,6 +119,65 @@ router.post('/createalertsmaster', function(req, res)
 	}
 });
 
+router.post('/applyAlertProfile', function(req, res)
+{
+	try {
+		
+    let alertsdata = req.body;
+    
+    let update = {
+      "$set": {
+        "deviceIMEIID" : alertsdata.deviceid
+      }
+    }
+
+		alertsmasterModel.findOneAndUpdate({_id: alertsdata._id}, update, function(err,obj) { 
+			console.log(obj); 
+			if (obj == undefined) {
+        res.json({ "success": false, "errormessage": "record is not available!!" });
+			}
+			else
+			{
+				res.json({ "success": true, "errormessage": "record is updated!!" });
+			}		
+		
+		});        
+		
+	} catch (error) {
+		LogError(error, "applyAlertProfile");
+	}
+});
+
+router.post('/removeAlertProfile', function(req, res)
+{
+	try {
+		
+    let alertsdata = req.body;
+    
+    let update = {
+      "$set": {
+        "deviceIMEIID" : null
+      }
+    }
+
+		alertsmasterModel.findOneAndUpdate({_id: alertsdata._id}, update, function(err,obj) { 
+			console.log(obj); 
+			if (obj == undefined) {
+        res.json({ "success": false, "errormessage": "record is not available!!" });
+			}
+			else
+			{
+				res.json({ "success": true, "errormessage": "record is updated!!" });
+			}		
+		
+		});        
+		
+	} catch (error) {
+		LogError(error, "applyAlertProfile");
+	}
+});
+
+
 router.post('/getEventsAlertsByUser', function(req, res){
   try {
     
@@ -110,6 +188,25 @@ router.post('/getEventsAlertsByUser', function(req, res){
             } 
   
             res.json({ success: true, data: resultss});
+        });
+
+      
+  } catch (error) {
+    console.log(error);
+      res.json({ success: false, message: error });
+  }
+});
+
+router.post('/deleteAlertsMaster', function(req, res){
+  try {
+    
+    alertsmasterModel.remove({_id: req.body._id}).exec( function (err, resultss)
+        {
+            if (err) {
+              res.send({ success: false, message: err });
+            } 
+  
+            res.json({ success: true, message: "Deleted Successfully!!"});
         });
 
       
