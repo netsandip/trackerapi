@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var bodyparser = require('body-parser');
 var express = require('express');
 var router = express.Router();
-
+var moment = require('moment');
 
 var alertsmaster = require('../dbmodel/alertsmaster');
 var alertsmasterModel = mongoose.model('alertsmasterInfo', alertsmaster, 'alerts_master_gps');
@@ -215,5 +215,72 @@ router.post('/deleteAlertsMaster', function(req, res){
       res.json({ success: false, message: error });
   }
 });
+
+router.post('/getAlertsGraphsByDeviceID', function(req, res) {
+    
+  try {
+    var start = new Date();
+    var end = new Date();      
+
+    let dateRange = req.body.dateRange;
+    let alertType = req.body.alertType;
+    let userid = req.body.userid;
+    let interval;
+
+    switch (dateRange) {
+      case "Last 1 month":
+      end = moment().add(-1, 'months').toDate();
+      interval = {
+          $dayOfMonth: '$Created_date'
+      };
+        break;
+      
+      case "Last 6 months":
+      end = moment().add(-5, 'months').toDate();
+      interval = { $dayOfMonth: '$Created_date'};
+        break;
+
+      case "Last 10 months":
+      end = moment().add(-10, 'months').toDate();
+      interval = {$dayOfMonth: '$Created_date'};
+        break;
+    
+
+      default:
+      start = req.body.startDate;
+      end = req.body.endDate
+        break;
+    }
+
+    let pipeline = [
+        {
+           $match: { Created_date: {$gte: end, $lt: start }, alerts_type: alertType, userid: userid },
+        },
+        {
+          $group: {
+            _id: interval,           
+            count: { $sum: 1 }         
+          }
+        }
+    ];
+
+    alertsTransmasterModel.aggregate(pipeline).exec(
+      function(err, docs) {
+          if (err) {
+              res.send({ success: false, message: err });
+              return;
+          }       
+         
+      res.json({ success: true, data: docs});
+      });
+
+       
+    
+  } catch (error) {
+    console.log(error);
+    //res.json({ success: false, message: error });
+  }
+});
+
 
 module.exports = router
