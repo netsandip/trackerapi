@@ -18,7 +18,7 @@ import { FormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
 // import { SparkLineComponent } from './../sparkline/sparkline.component';
 // import { Nvd3Component } from './nvd3/nvd3.component';
-
+import { Ng5SliderModule } from 'ng5-slider';
 @NgModule({
     imports: [
         RouterModule.forChild(MapsRoutes),
@@ -27,6 +27,7 @@ import { ChartsModule } from 'ng2-charts';
         HttpModule,
         ChartsModule,
         FormsModule,
+        Ng5SliderModule,
         AgmCoreModule.forRoot({
             apiKey: 'AIzaSyDVYVh0MbUHUApDX7kq61WqvSPcDkMaDWk',
             libraries: ['places'],

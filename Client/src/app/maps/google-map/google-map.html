@@ -1,7 +1,7 @@
 
 <div class="" style="padding-left: 0px;">
      <div class="col-lg-12 col-md-12 col-sm-12 inner_div" [hidden]="showdevicedetails">
-        <div class="col-md-2" style="padding: 0px;">
+        <div class="col-md-2" style="padding: 0px; max-width: 21%">
         <!-- <div class="col-lg-12 col-md-12 col-sm-12" style = "margin-right: -14%;"> -->
                 <div class="side_menu" *ngIf="devicelist">
                     <img src="assets/images/logo/search.png" class="search_icon" />
@@ -12,14 +12,14 @@
                 </div>
         <div class="col-lg-12 col-md-12 col-sm-12 side_menu" *ngFor="let device of devicelist;">
             <ul class="devicelist_ul" (click)="getdevicedetails(device.deviceIMEIID)">
-                <li><span style="font-size: 11px;font-weight: bold;">{{device.deviceIMEIID}}</span> </li>
+                <li><span style="font-weight: bold;">{{device.deviceIMEIID}}</span> </li>
                 <li> {{device.address}}</li>
                 <li> {{device.hourdifference| number : '1.2-2'}} hour ago </li>
             </ul>
         </div>
         <!-- </div> -->
         </div>
-        <div class="col-md-10 pull-right" style="border-left: 1px solid #d4d1d1;">
+        <div class="col-md-10 pull-right" style="border-left: 1px solid #d4d1d1; max-width: 79%">
                 <agm-map #AgmMap
                 [latitude]="latitude"
                 [longitude]="longitude"
@@ -47,11 +47,11 @@
     </div>
 
     <div class="col-lg-12 col-md-12 col-sm-12 inner_div" [hidden]="!showdevicedetails">
-        <div class="col-md-12" style="padding: 8px 27px 8px 8px;">
-                <div class="col-md-2">
+        <div class="col-md-12" style="padding: 8px 27px 8px 8px; border-bottom: 1px solid #d4d1d1;">
+                <div class="col-md-2" style="max-width: 21%">
                         {{selecteddeviceid}}
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-7">
                   <ul  class="nav nav-pills">
                         <li>
                           <a  href="#1a" data-toggle="tab" class="active">Status</a>
@@ -64,7 +64,7 @@
                         </li>
                   </ul>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2" style="max-width: 20%;">
                     <select class="form-control" (change)="onRangeChange($event.target.value)" style="height: 35px">
                         <option *ngFor="let data of datarangelist;">{{data.text}}</option>
                     </select>
@@ -74,18 +74,18 @@
 
         <div class="tab-content clearfix" style="width:100%">
             <div class="tab-pane active" id="1a">
-                <div class="col-md-12 col-sm-12 col-lg-12" style="border-top: 1px solid #efe6e6;">
-                    <div class="col-md-2" style="padding: 0px;" >
+                <div class="row" style="border-top: 1px solid #efe6e6; display: block">
+                    <div class="col-md-2" style="padding: 0px;  max-width: 22%; height: 600px; overflow: auto;" >
                     <div class="col-md-12"style="padding: 0px;">
                             <ul class="devicelist_ul">
-                                    <li class="side_menu2" style="text-align: center;">
-                                        <span class="back_btn">
-                                            <a  (click)="goback()">Back</a>
-                                        </span>
-                                        <span style="font-size: 11px;font-weight: bold; display:inherit">{{selecteddevicedetails.UTC_time | date:'medium'}}
-
-                                        </span>
-                                    <span>( {{selecteddevicedetails.hourdifference | number : '1.2-2'}} hour ago) </span>
+                                    <li class="side_menu2" style="min-height: 70px;">
+                                      <div class="col-md-12">
+                                        <div class="col-md-4"> <span class="back_btn"> <a  (click)="goback()">Back</a> </span></div>
+                                        <div class="col-md-8">
+                                            <span style="font-size: 11px;font-weight: bold; display:inherit">{{selecteddevicedetails.UTC_time | date:'medium'}} </span>
+                                            <span>( {{selecteddevicedetails.hourdifference | number : '1.2-2'}} hour ago) </span>
+                                        </div>
+                                      </div>
                                     </li>
                                     <li class="side_menu2"><span>Location</span> <br/>
                                         <span style="font-weight: bold;color: black;">
@@ -95,10 +95,10 @@
                                     <li class="side_menu2"> Sensor </li>
                                     <li (click)="showSensorGraph('temp')" >
                                         <div class="col-md-12 sensor_div">
-                                            <div class="col-md-4">
-                                                Temperature (F) {{LTemperature}}
+                                            <div class="col-md-6">
+                                                Temperature <br> <span class="sensor_unit_txt">{{LTemperature}} (F) </span>
                                             </div>
-                                            <div class="col-md-8">
+                                            <div class="col-md-6">
                                                     <canvas baseChart height="120" [datasets]="lineChartDataForTemp" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
 
                                             </div>
@@ -106,60 +106,60 @@
                                         </li>
                                     <li (click)="showSensorGraph('humidity')">
                                             <div class="col-md-12 sensor_div">
-                                                    <div class="col-md-4">
-                                                        Humidity (%) {{Lhumidity}}
+                                                    <div class="col-md-6">
+                                                        Humidity <br> <span class="sensor_unit_txt"> {{Lhumidity}} (%) </span>
                                                     </div>
-                                                    <div class="col-md-8">
+                                                    <div class="col-md-6">
                                                             <canvas baseChart height="120" [datasets]="lineChartDataForHumidity" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
                                                      </div>
                                                 </div>
                                         </li>
                                         <li (click)="showSensorGraph('pressure')" >
                                             <div class="col-md-12 sensor_div">
-                                                    <div class="col-md-4">
-                                                        Pressure (PSL) {{LPressure}}
+                                                    <div class="col-md-6">
+                                                        Pressure <br> <span class="sensor_unit_txt">{{LPressure}} (PSL) </span>
                                                     </div>
-                                                    <div class="col-md-8">
+                                                    <div class="col-md-6">
                                                             <canvas baseChart height="120" [datasets]="lineChartDataForPressure" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
                                                         </div>
                                              </div>
                                         </li>
                                     <li (click)="showSensorGraph('light')">
                                             <div class="col-md-12 sensor_div">
-                                                    <div class="col-md-4">
-                                                        Light (lux) {{LLight}}
+                                                    <div class="col-md-6">
+                                                        Light <br> <span class="sensor_unit_txt">  {{LLight}} (lux) </span>
                                                     </div>
-                                                    <div class="col-md-8">
+                                                    <div class="col-md-6">
                                                             <canvas baseChart height="120" [datasets]="lineChartDataForLight" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
                                                         </div>
                                              </div>
                                    </li>
                                     <li (click)="showSensorGraph('motion')">
                                             <div class="col-md-12 sensor_div">
-                                                    <div class="col-md-4">
-                                                        Motion Activity {{LmotionActivity}}
+                                                    <div class="col-md-6">
+                                                        Motion Activity <br> <span class="sensor_unit_txt">{{LmotionActivity}} </span>
                                                     </div>
-                                                    <div class="col-md-8">
+                                                    <div class="col-md-6">
                                                             <canvas baseChart height="120" [datasets]="lineChartDataFormotionActivity" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
                                                         </div>
                                              </div>
                                     </li>
                                     <li (click)="showSensorGraph('xyz_accelaration')">
                                       <div class="col-md-12 sensor_div">
-                                              <div class="col-md-4">
-                                                XYZ Acceleration {{LXYZ_Acceleration}}
+                                              <div class="col-md-6">
+                                                XYZ Acceleration <br> <span class="sensor_unit_txt">{{LXYZ_Acceleration}} (G) </span>
                                               </div>
-                                              <div class="col-md-8">
+                                              <div class="col-md-6">
                                                       <canvas baseChart height="120" [datasets]="lineChartDataForXYZAcceleration" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
                                                   </div>
                                        </div>
                                    </li>
                                   <li (click)="showSensorGraph('acceleration')">
                                         <div class="col-md-12 sensor_div">
-                                                <div class="col-md-4">
-                                                    Acceleration {{LAcceleration}}
+                                                <div class="col-md-6">
+                                                    Acceleration  <br> <span class="sensor_unit_txt"> {{LAcceleration}} (G)</span>
                                                 </div>
-                                                <div class="col-md-8">
+                                                <div class="col-md-6">
                                                         <canvas baseChart height="120" [datasets]="lineChartDataForAcceleration" [labels]="lineChartLabels" [options]="lineChartOptions" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
                                                     </div>
                                          </div>
@@ -169,8 +169,8 @@
 
                     </div>
                     </div>
-                    <div class="right_div col-md-10 pull-right">
-                      <div class="col-md-12" style="padding: 3%;">
+                    <div class="right_div col-md-10 pull-right" style=" max-width: 78% ; padding: 0px;">
+                      <div class="col-md-12 graph_div_css">
 <div class="col-md-12" *ngIf= "datatext=='temp'" style="min-height:150px">
         <canvas baseChart height="90" [datasets]="lineChartDataForTemp" [labels]="lineChartLabels" [options]="lineChartOptionsanother" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
 </div>
@@ -193,7 +193,7 @@
   <canvas baseChart height="90" [datasets]="lineChartDataForAcceleration" [labels]="lineChartLabels" [options]="lineChartOptionsanother" [colors]="lineChartColors" [legend]="lineChartLegend" [chartType]="lineChartType"></canvas>
 </div>
 </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12"  style="padding: 0px;">
                             <agm-map #AgmMap
                             [latitude]="latitude"
                             [longitude]="longitude"
@@ -217,10 +217,10 @@
                   </div>
             </div>
             <div class="tab-pane" id="2a">
-                <div class="col-md-12 col-sm-12 col-lg-12" style="border-top: 1px solid #efe6e6;">
-                    <div class="col-md-2" style="padding: 0px;" >
+                <div class="row" style="border-top: 1px solid #efe6e6; display: block">
+                    <div class="col-md-2" style="padding: 0px;  max-width: 22%; height: 600px; overflow: auto;" >
                     <div class="row" style="margin-right: 0%;">
-                    <div class="col-md-12" style="padding: 0px;">
+                    <div class="col-md-12" style="padding: 0px; padding-left: 10%;">
                         <ul  class="nav nav-pills">
                             <li>
                               <a  class="active"  href="#A1" data-toggle="tab" (click)="showEventDiv()">Events</a>
@@ -232,28 +232,62 @@
                     </div>
                     <div class="tab-content clearfix" style="width:100%; padding-top:5%">
                           <div class="tab-pane active" id="A1">
-                            <div class="left_alert"  *ngFor="let uShipment of items">
-                            <div class="parameter_div"> Location Parameter1 </div>
-                            <div class="arrival_div">On Arrival | ASW Arrival</div>
-                            <div class="date_div"> July 19, 16:17 PM </div>
+                            <div class="left_alert pointr_cursor"  *ngFor="let eventalert of EventAlerts">
+                            <div class="parameter_div" (click)="showAlertEventDetails(eventalert._id)"> {{eventalert.alerts_message}}</div>
+                            <div class="arrival_div">{{eventalert.alerts_type}}</div>
+                            <div class="date_div"> {{eventalert.Created_date | date}} </div>
                             </div>
                           </div>
                           <div class="tab-pane" id="A2">
                               <div class="left_alert">
-                                  <div class="parameter_div" style="padding: 6%;"> Alert Profile <a  class="pull-right" (click)="gotoAlertPage()"> Apply Alert Profile</a> </div>
+                                  <div class="parameter_div" style="padding: 6%;"> Alert Profile
+                                    <!-- <a  class="pull-right" (click)="applyAlertPage()"> Apply Alert Profile</a>  -->
+                                    <button type="button" style="padding: 1%;" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">Apply Alert Profile</button>
+                                  </div>
                               </div>
                               <div class="left_alert"  *ngFor="let alertProfile of alertProfileList">
-                              <div class="parameter_div" (click)=showalertProfileData(alertProfile._id)> {{alertProfile.alerts_master_name}} </div>
+                              <!-- <div class="parameter_div pointr_cursor" (click)=showalertProfileData(alertProfile._id)> {{alertProfile.alerts_master_name}} </div>
                               <div class="arrival_div">{{alertProfile.assignee_email[0]}}</div>
-                              <div class="date_div"> {{alertProfile.Created_date | date}} </div>
+                              <div class="date_div"> {{alertProfile.Created_date | date}} </div> -->
                             </div>
                           </div>
                     </div>
                     </div>
                     </div>
-                    <div class="right_div col-md-10 pull-right" style="border-left: 1px solid #e4e1e1;">
+                    <div class="right_div col-md-10 pull-right" style="border-left: 1px solid #e4e1e1; max-width: 78% ; padding: 0px;">
+
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title">Apply Alert Profile</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+       <select class="form-control select_css"  #t (change)="applyAlert(t.value)">
+         <option   value="0" class="">Select profile in the list</option>
+         <option  value="{{alertProfile._id}}" *ngFor="let alertProfile of dropdownalertProfileList">{{alertProfile.alerts_master_name}}</option>
+       </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" (click)="saveapply()" >Apply</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
                         <div class="col-md-12"  style="display: block" *ngIf="!showConfigDiv">
-                            <canvas baseChart
+                           <div *ngIf="!showEventAlertDiv">
+                             <canvas baseChart
                           [datasets]="barChartData"
                           [labels]="barChartLabels"
                           [options]="barChartOptions"
@@ -261,68 +295,148 @@
                           [chartType]="barChartType"
                           (chartHover)="chartHovered($event)"
                           (chartClick)="chartClicked($event)"></canvas>
+                        </div>
+
+                        <div class="col-md-12"  style="display:block; margin-top: 2%;"  *ngIf="showEventAlertDiv">
+                          <div class="panel panel-default">
+                              <div class ="panel-heading padding_header"> <a (click)=goGraphback() >Back</a>  Overview
+                              </div>
+                              <div class ="panel-body">
+                                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                      <div class="col-md-5">Alert Details</div>
+                                   </div>
+
+                                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                    <div class="col-md-6">Alert Location</div>
+                                    <div class="col-md-6">Time </div>
+                                 </div>
+                                 <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                    <div class="col-md-6">Alert  Type </div>
+                                    <div class="col-md-6">{{EventAlertsDetails.alerts_type}}</div>
+                                 </div>
+                                 <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                    <div class="col-md-6">Alert  Message </div>
+                                    <div class="col-md-6">{{EventAlertsDetails.alerts_message}}</div>
+                                 </div>
+
+                                 <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                    <div class="col-md-6">Alert  Value </div>
+                                    <div class="col-md-6">{{EventAlertsDetails.alerts_value}}</div>
+                                 </div>
+                            </div>
+                          </div>
+                          </div>
                        </div>
-                       <div class="col-md-12"  style="display: block"  *ngIf="showConfigDiv">
-                          <div class="col-md-12 col-sm-12 col-lg-12 row_padding">
+
+
+
+                       <div class="col-md-12"  style="display:block; margin-top: 2%;"  *ngIf="showConfigDiv">
                               <div class="panel panel-default">
-                                  <div class ="panel-heading">{{getalertsProfileData.alerts_master_name}}</div>
+                                  <div class ="panel-heading padding_header">{{getalertsProfileData.alerts_master_name}}
+                                    <a class="pull-right pointr_cursor"  (click)="gotoAlertPage(getalertsProfileData._id)">Edit</a>
+                                  </div>
                                   <form>
                                   <div class ="panel-body">
 
                                           <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
                                             <div class="col-md-2">Description</div>
-                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
+                                            <div class="col-md-10">{{getalertsProfileData.alerts_master_name}}</div>
                                          </div>
                                          <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
                                             <div class="col-md-2">User Assignees</div>
-                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
+                                            <div class="col-md-10">{{getalertsProfileData.assignee_email}}</div>
                                          </div>
                                          <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
                                             <div class="col-md-2">External User Assignees</div>
-                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
+                                            <div class="col-md-10">{{getalertsProfileData.external_users}}</div>
                                          </div>
                                          <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
                                             <div class="col-md-2">Webhook Push Notification(s)</div>
-                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
+                                            <div class="col-md-10">{{getalertsProfileData.alerts_master_name}}</div>
                                          </div>
                                          <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
                                             <div class="col-md-2">Created</div>
-                                            <div class="col-md-10">Date</div>
+                                            <div class="col-md-10">{{getalertsProfileData.Created_date}}</div>
                                          </div>
                                          <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
                                             <div class="col-md-2">Modified</div>
-                                            <div class="col-md-10">Date</div>
+                                            <div class="col-md-10">{{getalertsProfileData.alerts_master_name}}</div>
                                          </div>
-
-                                  </div>
-                                  </form>
-                              </div>
-
-
-
-                              <div class="panel panel-default">
-                                  <div class ="panel-heading">Shipment Alerts</div>
-                                  <form>
-                                  <div class ="panel-body">
-
-                                          <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
-                                            <div class="col-md-2">Departure</div>
-                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
-                                         </div>
+                                         <div class="col-lg-12 col-md-12 col-sm-12"> <hr> </div>
                                          <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
-                                            <div class="col-md-2">Arrival</div>
-                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
-                                         </div>
+                                            <span class ="padding_header"> Shipment Alerts </span>
+                                        </div>
                                          <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
-                                            <div class="col-md-2">ETA</div>
-                                            <div class="col-md-10"><input type="text" class="form-control" /></div>
-                                         </div>
+                                          <div class="col-md-2">Departure</div>
+                                          <div class="col-md-10" *ngIf="getalertsProfileData.shipment_departs_origin">  Notify when shipment departs origin address</div>
+                                          <div class="col-md-10" *ngIf="!getalertsProfileData.shipment_departs_origin">   No Alert</div>
 
+                                       </div>
+                                       <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                          <div class="col-md-2">Arrival</div>
 
+                                          <div class="col-md-10" *ngIf="getalertsProfileData.shipment_arrives_destination">    Notify when shipment arrives at destination address</div>
+                                          <div class="col-md-10" *ngIf="!getalertsProfileData.shipment_arrives_destination">   No Alert</div>
+                                       </div>
+                                       <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                          <div class="col-md-2">ETA</div>
+                                          <div class="col-md-10">{{getalertsProfileData.alerts_master_name}}</div>
+                                       </div>
+                                       <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                        <div class="col-md-2">Stops</div>
+                                        <div class="col-md-10" *ngIf="getalertsProfileData.shipment_stops">{{getalertsProfileData.shipment_stops}}</div>
+                                      <div class="col-md-10" *ngIf="!getalertsProfileData.shipment_stops">No Alerts</div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 row_padding"> <hr> </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                        <span class ="padding_header"> Geofences </span>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                    <div class="col-md-2">Locations</div>
+                                    <div class="col-md-10" *ngIf="getalertsProfileData.shipment_stops">{{getalertsProfileData.shipment_stops}}</div>
+                                    <div class="col-md-10" *ngIf="!getalertsProfileData.shipment_stops">No Alerts</div>
                                   </div>
-                                  </form>
-                              </div>
+                                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding"> <hr> </div>
+                                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                      <span class ="padding_header"> Climate Ranges </span>
+                                  </div>
+                                  <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                  <div class="col-md-2">Temperature</div>
+
+                                  <div class="col-md-10"><ng5-slider [(value)]="tempminvalue" [(highValue)]="tempmaxvalue"  highValue="100"    highValue="100" [options]="slideroptions"  ></ng5-slider></div>
+                                </div>
+
+                                <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                       <div class="col-md-2">Humidity</div>
+                                       <div class="col-md-10"><ng5-slider [(value)]="humidityminvalue" [(highValue)]="humiditymaxvalue"  highValue="100" [options]="slideroptions"  ></ng5-slider></div>
+                                 </div>
+                                     <div class="col-lg-12 col-md-12 col-sm-12 row_padding"> <hr> </div>
+                                     <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                        <span class ="padding_header"> Integrity </span>
+                                    </div>
+                              <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                              <div class="col-md-2">Shock Sensitivity</div>
+                              <div class="col-md-10" *ngIf="getalertsProfileData.shock_events">Shock events are enabled</div>
+                              <div class="col-md-10" *ngIf="!getalertsProfileData.shock_events">No Alerts</div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 row_padding"> <hr> </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                                <span class ="padding_header"> Connection </span>
+                            </div>
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                            <div class="col-md-2">Lost Connection</div>
+                            <div class="col-md-10" *ngIf="getalertsProfileData.shipment_stops">{{getalertsProfileData.shipment_stops}}</div>
+                            <div class="col-md-10" *ngIf="!getalertsProfileData.shipment_stops">No Alerts</div>
                           </div>
+                          <div class="col-lg-12 col-md-12 col-sm-12 row_padding"> <hr> </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+                          <div class="col-md-2">Battery Alert</div>
+                          <div class="col-md-10"><ng5-slider [(value)]="batteryminvalue" [(highValue)]="batterymaxvalue"  highValue="100" [options]="slideroptions"  ></ng5-slider></div>
+                          </div>
+                                  </div>
+                                  </form>
+                              </div>
                        </div>
                   </div>
                   </div>

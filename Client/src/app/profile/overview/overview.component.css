@@ -20,7 +20,8 @@ padding:10px;
 }
 .row_padding_border{
   padding: 12px;
-  border-bottom: 1px solid #c3baba;
+  border-bottom: 1px solid #e6dede;
+  font-size: 15px;
 }
 .bold_txt{
   font-weight: bold;

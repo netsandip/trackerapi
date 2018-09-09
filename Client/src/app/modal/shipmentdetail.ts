@@ -13,8 +13,8 @@ export class shipmentdetail {
 
   // template_id: string;
   // templateName:string;
-  // shipFrom: string;
-  // shipTo: string;
+   shipFrom: string;
+   shipTo: string;
 }
 // export class templatedetail {
 //   template_id: string;

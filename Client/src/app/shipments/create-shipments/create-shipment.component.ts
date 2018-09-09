@@ -17,8 +17,8 @@ export class createShipmentComponent implements OnInit  {
     public isTemplateSelected: boolean= true;
     public showcustometemp: boolean= false;
     public showcustometempdiv: boolean= false;
-    public templateMsg: string="";
-    public shipmentMsg: string="";
+    public templateMsg: string= '';
+    public shipmentMsg: string= '';
     templateForm: FormGroup;
     shipmentForm: FormGroup;
     constructor(private shipmentService: ShipmentService, private fb: FormBuilder) {
@@ -56,27 +56,23 @@ export class createShipmentComponent implements OnInit  {
            })
     }
     saveshipment(){
-        console.log("shipmentdata",this.shipmentdata);
+        console.log('shipmentdata',this.shipmentdata);
         this.shipmentService.createShipment(this.shipmentdata).subscribe(data => {
-          console.log("create",data)
              if (data.success) {
-                this.shipmentMsg = "Record saved successfully";
+                this.shipmentMsg = 'Record saved successfully';
                 this.shipmentdata= new shipmentdetail();
              }
              else{
-              this.shipmentMsg ="shipment already exists in the system";
+              this.shipmentMsg ='shipment already exists in the system';
              }
          })
     }
-    saveTemplate(){
-      console.log("shipmentdata",this.templatedata);
+    saveTemplate() {
       this.shipmentService.createShipmentTemplate(this.templatedata).subscribe(data => {
-          console.log("templatedata", data)
-           if (data.success== true) {
-            this.templateMsg = "Record Saved Successfully";
+           if (data.success) {
+            this.templateMsg = 'Record Saved Successfully';
             this.templatedata= new templatedetail();
            }
-
            else {
             this.templateMsg = data.errormessage;
            }

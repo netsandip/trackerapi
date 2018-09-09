@@ -50,10 +50,28 @@ getAlertsListByUser(userdetails) {
                     return this.http.post(this.serverURL + '/alerts/getAlertsMasterByUser', userdetails, { headers: headers })
                         .map(res => res.json());
             }
+getEventAlertsList(userdetails) {
+              const headers = new Headers();
+                      headers.append('Content-Type', 'application/json');
+                      return this.http.post(this.serverURL + '/alerts/getEventsAlertsByUser', userdetails, { headers: headers })
+                          .map(res => res.json());
+              }
 CreateAlertsProfile(alertsProfileData) {
               const headers = new Headers();
                       headers.append('Content-Type', 'application/json');
-                      return this.http.post(this.serverURL + '/createalertsmaster', alertsProfileData, { headers: headers })
+                      return this.http.post(this.serverURL + '/alerts/createalertsmaster', alertsProfileData, { headers: headers })
                           .map(res => res.json());
               }
+getAssigneeEmailList(alertsProfileData) {
+                const headers = new Headers();
+                        headers.append('Content-Type', 'application/json');
+            return this.http.post(this.serverURL + '/users/getprofilesByOrganizationname', alertsProfileData, { headers: headers })
+                            .map(res => res.json());
+                }
+deletealertProfile(alertdata) {
+                  const headers = new Headers();
+                          headers.append('Content-Type', 'application/json');
+              return this.http.post(this.serverURL + '/alerts/deleteAlertsMaster', alertdata, { headers: headers })
+                              .map(res => res.json());
+                  }
 }

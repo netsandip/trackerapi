@@ -56,7 +56,13 @@ getSensorDataByDeviceId(devicedetail) {
 getprofiledataByUser(userdetails) {
   const headers = new Headers();
   headers.append('Content-Type', 'application/json');
-  return this.http.post(this.serverURL + '/getprofilesByUser', userdetails, { headers: headers })
+  return this.http.post(this.serverURL + '/users/getprofilesByUser', userdetails, { headers: headers })
+      .map(res => res.json());
+}
+updateprofileByUser(profiledata){
+  const headers = new Headers();
+  headers.append('Content-Type', 'application/json');
+  return this.http.post(this.serverURL + '/users/createUser', profiledata, { headers: headers })
       .map(res => res.json());
 }
 }

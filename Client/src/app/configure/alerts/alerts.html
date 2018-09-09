@@ -1,18 +1,18 @@
-<div class="container-fluid" style="padding-top: 10px;">
+<div class="col-md-12 col-sm-12 col-lg-12" style="padding-top: 10px;">
 <div class="col-md-12 col-sm-12 col-lg-12">
-  <div class="panel panel-default" *ngIf="!isProfilePageVisiable" [ngClass]="{ 'alertlistdiv': islistshowing, 'col-md-8':islistshowing}">
+  <div class="panel panel-default" *ngIf="!isProfilePageVisiable" [ngClass]="{ 'alertlistdiv': islistshowing, 'col-md-7':islistshowing}">
     <div class ="panel-heading" style="height: 60px;">
-      Alert Profile
+      Alert Profile   <span style="color: red"> {{msgtxt}} </span>
       <input type="button" class="btn btn-success pull-right" value="Create New Profile"  (click)="ShowProfile()"/>
     </div>
 
     <div class ="panel-body">
-        <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
+        <div class="col-lg-12 col-md-12 col-sm-12 row_all_padding header_txt_css">
             <div class="col-md-6">Profile Name</div>
             <div class="col-md-3">Assignees</div>
             <div class="col-md-3">Modified</div>
          </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 row_padding"  *ngFor="let profilelist of alertProfileList">
+            <div class="col-lg-12 col-md-12 col-sm-12 row_all_padding"  *ngFor="let profilelist of alertProfileList">
               <div class="col-md-6" style ="cursor: pointer;" (click)=showalertProfileData(profilelist._id) >{{profilelist.alerts_master_name}}</div>
               <div class="col-md-3"><img class="profile-img img-fluid img_css" src="assets/images/user.jpg" ></div>
               <div class="col-md-3">{{profilelist.Created_date | date}}</div>
@@ -21,18 +21,14 @@
     </div>
 
 </div>
-<div class="panel panel-default col-md-4" *ngIf="islistshowing">
-
-
+<div class="panel panel-default col-md-5" *ngIf="islistshowing" style="margin: 1px 0px 0px 35px; width: 39%;overflow: auto; height: 670px;">
   <div class ="panel-body">
       <div style="height: 45px;" class="row row_padding">
         <div class="col-md-8">{{getalertsProfileData.alerts_master_name}}</div>
-        <div class="col-md-2"> <a class="Edit_btn">Edit</a></div>
-        <div class="col-md-2">  <a class="close_btn" (click)=closemodal()>Close</a> </div>
-
-
-          <!-- <input type="button" class="btn btn-success pull-right" value="Create New Profile"  (click)="ShowProfile()"/> -->
-        </div>
+        <div class="col-md-1"> <a class="Edit_btn pull-right" (click)=ShowEditPage(getalertsProfileData._id)>Edit</a></div>
+        <div class="col-md-1">  <a class="Edit_btn" (click)=DeleteAlertProfile(getalertsProfileData._id)>Delete</a> </div>
+        <div class="col-md-2"> <i class="fa fa-window-close close_btn pull-right" aria-hidden="true" (click)=closemodal()></i>  </div>
+      </div>
     <div class="col-lg-12 col-md-12 col-sm-12 row_btm_padding">
 
         <div class="col-md-3">Descrption</div>
@@ -117,7 +113,7 @@
 </div>
 
 
-<div class="panel panel-default" *ngIf="isProfilePageVisiable">
+<div class="panel panel-default" *ngIf="isProfilePageVisiable" style="height: 600px; overflow: auto;">
     <div class ="panel-heading" style="height: 60px;">
      Create New Alert Profile
       <!-- <input type="button" class="btn btn-defaults pull-right" value="Back" /> -->
@@ -157,18 +153,12 @@
             </div>
 
       </div>
-      <!-- <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
-          <div class="col-md-8">Geofence</div>
-          <div class="col-md-4">
-          <a>Add Geofence</a>
-        </div>
-      </div> -->
       <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
       <div class="col-lg-3 col-md-3 col-sm-12 txt_align_center ">
           Temperature
       </div>
       <div class="col-lg-9 col-md-9 col-sm-12 ">
-          <ng5-slider [(value)]="tempvalue"  highValue="100" [options]="tempoptions"  ></ng5-slider>
+          <ng5-slider  [(value)]="tempminvalue" [(highValue)]="tempmaxvalue"  highValue="100" [options]="slideroptions"  ></ng5-slider>
       </div>
     </div>
     <div class="col-lg-12 col-md-12 col-sm-12 row_padding">
@@ -176,7 +166,7 @@
           Humidity
       </div>
       <div class="col-lg-9 col-md-9 col-sm-12">
-          <ng5-slider [(value)]="humvalue"  highValue="100" [options]="humoptions"></ng5-slider>
+          <ng5-slider [(value)]="humminvalue" [(highValue)]="hummaxvalue"  highValue="100" [options]="slideroptions"></ng5-slider>
       </div>
     </div>
 
@@ -194,7 +184,7 @@
               Battery Power
           </div>
           <div class="col-lg-9 col-md-9 col-sm-12 ">
-              <ng5-slider [(value)]="batteryvalue"  highValue="100" [options]="batteryoptions"></ng5-slider>
+              <ng5-slider [(value)]="batteryminvalue" [(highValue)]="batterymaxvalue" highValue="100" [options]="slideroptions"></ng5-slider>
           </div>
         </div>
 
@@ -204,7 +194,7 @@
         </div>
         <div class="col-lg-9 col-md-9 col-sm-12">
          <select class="col-md-12" style="height: 35px;" formControlName="assignee_email" [(ngModel)]="alertsProfileData.assignee_email">
-           <option value="sandeep@test.com">Sandeep Krishna</option>
+           <option value="{{emaillist.EmailAddress}}"  *ngFor="let emaillist of assigneeEmailList">{{emaillist.EmailAddress}}</option>
          </select>
         </div>
       </div>
@@ -214,7 +204,7 @@
           </div>
           <div class="col-lg-9 col-md-9 col-sm-12 ">
            <select class="col-md-12" style="height: 35px;" formControlName="external_users" [(ngModel)]="alertsProfileData.external_users">
-              <option value="sandeep@test.com">Sandeep Krishna</option>
+              <option value="{{emaillist.EmailAddress}}" *ngFor="let emaillist of assigneeEmailList">{{emaillist.EmailAddress}}</option>
            </select>
           </div>
         </div>
@@ -239,24 +229,3 @@
 </div>
 
 </div>
-
-
-<!-- Modal -->
-<!-- <div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
-      </div>
-      <div class="modal-body">
-        <p>Some text in the modal.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div> -->

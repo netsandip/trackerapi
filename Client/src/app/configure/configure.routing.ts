@@ -18,6 +18,12 @@ export const ConfigureRoutes: Routes = [
                 }
             },
             {
+            path: 'alert-elements/:id',
+            component: AlertsComponent,
+            data: {
+              title: 'test Elements'
+          } },
+            {
                 path: 'shipment-template',
                 component: ShipmentTemplateComponent,
                 data: {

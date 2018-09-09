@@ -11,13 +11,13 @@ a {
   color: darkblue;
 }
 .side_menu{
-  font-size: 10px;
+  font-size: 15px;
   border: 1px solid #efe7e7c4;
   cursor: pointer;
  color:  #2f2828;
 }
 .side_menu2{
-  font-size: 10px;
+  font-size: 15px;
   border: 1px solid #efe7e7c4;
   padding: 4%;
   border-right: none;
@@ -30,7 +30,7 @@ a {
 .devicelist_ul {
   list-style-type: none;
   padding: 0px;
-
+  padding: 7px 0px 10px 5px;
 }
 .search_txt{
   border: none;
@@ -40,9 +40,11 @@ a {
 .right_div{
   border-left: 1px solid #efe7e7c4;
   /* border-left: 2px solid #b9b3b3; */
+  height: 600px;
+  overflow: auto;
 }
 .search_icon{
-  width: 10%;
+  width: 8%;
   position: absolute;
   padding-top: 3%;
 }
@@ -61,7 +63,7 @@ a {
 }
 .sensor_div{
   border: 1px solid #efe7e7c4;
-  padding: 4px 0px 0px 4px;
+  padding: 13px 0px 13px 5px;
   cursor: pointer;
   color:  #2f2828;
 }
@@ -79,8 +81,64 @@ a {
   padding: 4px 0px 2px 3px;
 }
 .left_alert{
-  border: 1px solid #f5eeeed9;padding-left: 3%;
+  border: 1px solid #f5eeeed9;padding-left: 10%;
 }
 .row_padding{
   padding-bottom: 2%;
+}
+hr{
+  display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+}
+.padding_header{
+  background-color: white;
+  font-size: 20px;
+  padding: 1%;
+}
+.pointr_cursor{
+  cursor: pointer;
+}
+agm-map{
+  height: 650px !important;
+}
+.sensor_unit_txt{
+font-size: 30px;
+}
+.graph_div_css{
+  padding-top: 15px;
+    position: absolute;
+    z-index: 1;
+    background-color: white;
+}
+.select_css{
+  height: 40px;
+  margin: 5% 0%;
+}
+/* Scrollbar */
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #bbadad;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #bbadad;
 }

@@ -10,6 +10,8 @@ import { ThemeConstants } from '../../shared/config/theme-constant';
 import { Router } from '@angular/router';
 import { ShipmentService } from './../../services/shipment.service';
 import {alertProfile} from './../../modal/alertprofile';
+import {eventalert} from './../../modal/eventalert';
+import { Options } from 'ng5-slider';
 
 @Component ({
     templateUrl: 'google-map.html',
@@ -32,12 +34,14 @@ export class GoogleMapComponent implements OnInit  {
     public selecteddeviceid:any= '';
     public selecteddevicedetails= new devicedetails;
     public showgraph : boolean = false;
-    public items = [1,2,3,4,5,6,7,8,9,10,11, 12];
+    public EventAlerts : Array<eventalert>;
+    public EventAlertsDetails : eventalert;
     public datarangelist = [{ id:1, text:"Last 24 hours"}, {id:2, text:"Last 48 hours" },{id:3, text:"Last 72 hours" },
     { id:4, text:"Last 7 days"},{ id:5,text:"Last 14 days"},{ id:6, text:"Last 30 days"  },{ id:7, text:"Last 60 days" },
     {   id:8,text:"Last 90 days" }];
 
     public alertProfileList: Array<alertProfile>;
+    public dropdownalertProfileList: Array<alertProfile>;
     public getalertsProfileData: alertProfile;
    // Last sensor data
 public LAcceleration:string="";
@@ -48,7 +52,7 @@ public LTemperature:string="";
 public Lhumidity:string="";
 public LmotionActivity:string="";
 public LXYZ_Acceleration:string="";
-
+public selectedalertId: any= '';
      // Line Chart Config
      public sensorListData : Array<any>;
      public lineChartLabels:Array<any> = [];
@@ -125,7 +129,16 @@ public LXYZ_Acceleration:string="";
         //      borderColor: this.themeColors.success
         //  }
      ];
-
+     tempmaxvalue: number = 0;
+     tempminvalue: number = 0;
+     humidityminvalue: number = 0;
+     humiditymaxvalue: number = 0;
+     batterymaxvalue: number = 0;
+     batteryminvalue: number = 0;
+     slideroptions: Options = {
+       floor: 0,
+       ceil: 100
+     };
 
     public showdevicedetails: boolean = false;
     public set searchedLocation(searchedLocation: Location) {
@@ -137,8 +150,10 @@ public LXYZ_Acceleration:string="";
       constructor(private trackerService: TrackerService, private colorConfig:ThemeConstants, private router: Router,
          private shipmentService: ShipmentService) {
           this.alertProfileList =  new Array<alertProfile>() ;
+          this.dropdownalertProfileList = new Array<alertProfile>();
           this.getalertsProfileData = new alertProfile();
-
+          this.EventAlerts = new Array<eventalert>() ;
+          this.EventAlertsDetails= new eventalert();
        }
 
     ngOnInit() {
@@ -149,6 +164,7 @@ public LXYZ_Acceleration:string="";
         this.getAlldevice();
         this.getsensordetails(861107036374529, 'Last 24 hours');
         this.getalertListbyUserId();
+        this.getEventalertList();
         this.maxSpeed = 40;
         if ('geolocation' in navigator) {
             navigator.geolocation.getCurrentPosition((position) => {
@@ -179,7 +195,6 @@ public LXYZ_Acceleration:string="";
         this.lineChartLabels= [];
       this.trackerService.getSensorDataByDeviceId(devicedetail).subscribe(data => {
         if (data.success) {
-           console.log("sensordata", data.data);
           this.sensorListData = data.data;
           for (let i = 0; i < this.sensorListData.length; i++ ) {
              this.tempdataL.push(this.sensorListData[i].avgLight);
@@ -275,12 +290,20 @@ public LXYZ_Acceleration:string="";
       });
   }
 
-public gotoAlertPage() {
-  window.location.href = '#/alerts/alert-elements';
+public gotoAlertPage(id) {
+  window.location.href = '#/alerts/alert-elements/' + id ;
 }
-
+public applyAlert(id) {
+this.selectedalertId = id;
+}
+public saveapply() {
+  this.alertProfileList.push(this.dropdownalertProfileList.filter(x => x._id.indexOf(this.selectedalertId) > -1)[0]);
+  this.dropdownalertProfileList = this.dropdownalertProfileList.filter(x => x._id !== this.selectedalertId);
+}
   public getTelemeticsDataByDeviceId() {
-    const devicedetails = {'deviceid': this.selecteddeviceid };
+    const devicedetails = {
+      'deviceid': this.selecteddeviceid
+    };
     this.trackerService.getTelemeticsDataByDeviceId(devicedetails).subscribe(data => {
       if (data.success) {
         this.LAcceleration = data.data.Acceleration;
@@ -300,10 +323,11 @@ public gotoAlertPage() {
   }
 
     private getdevicedetails(deviceid:any) {
+      sessionStorage.setItem('deviceid', deviceid);
       this.showdevicedetails =true;
         const deviceID = deviceid;
         this.selecteddeviceid=deviceid;
-        this.selecteddevicedetails=this.devicelist.find(x=>x.deviceIMEIID==this.selecteddeviceid);
+        this.selecteddevicedetails = this.devicelist.find(x => x.deviceIMEIID === this.selecteddeviceid);
 
         let date1: string = this.selecteddevicedetails.UTC_time;
         let date2: string = new Date().toString();
@@ -336,16 +360,45 @@ public gotoAlertPage() {
         };
         this.shipmentService.getAlertsListByUser(userdetails).subscribe(data => {
           if (data.success) {
-            this.alertProfileList = data.data;
-           // console.log("11",this.alertProfileList );
+            this.dropdownalertProfileList = data.data;
+            this.alertProfileList.push(this.dropdownalertProfileList[0]);
+            this.getalertsProfileData =  this.dropdownalertProfileList[0];
+            console.log(this.dropdownalertProfileList[0])
+
+            this.tempminvalue =  this.getalertsProfileData.temperature_min;
+            this.tempmaxvalue = this.getalertsProfileData.temperature_max;
+            this.humiditymaxvalue = this.getalertsProfileData.humidity_max;
+            this.humidityminvalue = this.getalertsProfileData.humidity_min;
+            this.batteryminvalue = this.getalertsProfileData.battery_min;
+            this.batterymaxvalue = this.getalertsProfileData.battery_max;
+          }
+      } );
+      }
+      public getEventalertList() {
+        const userdetails = {
+          //'userid': sessionStorage.getItem('userid')
+            'userid' : 'sandeep@test.com'
+        };
+        this.shipmentService.getEventAlertsList(userdetails).subscribe(data => {
+          if (data.success) {
+            this.EventAlerts = data.data;
+           // console.log("getEventAlertsList", this.EventAlerts);
           }
       } );
       }
       showalertProfileData(alertid: any) {
         this.getalertsProfileData = this.alertProfileList.filter(x => x._id.indexOf(alertid) > -1)[0];
-       // console.log( this.getalertsProfileData);
-       // this.islistshowing = true;
+            this.tempminvalue =  this.getalertsProfileData.temperature_min;
+            this.tempmaxvalue = this.getalertsProfileData.temperature_max;
+            this.humiditymaxvalue = this.getalertsProfileData.humidity_max;
+            this.humidityminvalue = this.getalertsProfileData.humidity_min;
+            this.batteryminvalue = this.getalertsProfileData.battery_min;
+            this.batterymaxvalue = this.getalertsProfileData.battery_max;
+        // this.tempvalue =  this.getalertsProfileData.temperature_min;
+        // this.batteryvalue = this.getalertsProfileData.battery_min;
+        // this.humidityvalue = this.getalertsProfileData.humidity_min;
       }
+
 // Alerts Section
 
 public barChartOptions:any = {
@@ -356,12 +409,19 @@ public barChartLabels:string[] = ['2006', '2007', '2008', '2009', '2010', '2011'
 public barChartType:string = 'bar';
 public barChartLegend:boolean = true;
 public showConfigDiv:boolean= false;
-
+public showEventAlertDiv:boolean= false;
 public barChartData:any[] = [
   {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
   {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}
 ];
 
+public showAlertEventDetails(alertid) {
+this.showEventAlertDiv = true;
+this.EventAlertsDetails = this.EventAlerts.filter(x => x._id.indexOf(alertid) > -1)[0];
+}
+public goGraphback() {
+  this.showEventAlertDiv = false;
+}
 // events
 public chartClicked(e:any):void {
   console.log(e);

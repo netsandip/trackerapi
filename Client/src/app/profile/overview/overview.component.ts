@@ -23,11 +23,17 @@ export class overviewComponent implements OnInit  {
         //'userid': 'sandeep@test.com'
         'userid': sessionStorage.getItem('userid')
       };
-      console.log("1",userdetails);
       this.trackerService.getprofiledataByUser(userdetails).subscribe(data => {
         if (data.success) {
            console.log(data.data);
            this.userProfileData = data.data;
+        }
+    } );
+    }
+    UpdateProfile(){
+      this.trackerService.updateprofileByUser( this.userProfileData).subscribe(data => {
+        if (data.success) {
+           console.log("UpdateProfile", data);
         }
     } );
     }

@@ -12,6 +12,7 @@ shipmentSchema = mongoose.Schema({
     shipment_template_id: Number,
     shipDate: Date,
     deliveryDate: Date,    
+    userid: String,
     updated_date : Date,
     Created_date : { type : Date, default: Date.now }
 });

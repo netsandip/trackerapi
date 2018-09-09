@@ -14,7 +14,7 @@ var util = require('util');
 
 var users = require('./middleware/users');
 var alerts = require('./middleware/alerts');
-
+var device = require('./middleware/device');
 
 var userSchema = require('./dbmodel/users');
 var UserModel = mongoose.model('usersinfo', userSchema, 'users_gps');    
@@ -39,45 +39,13 @@ app.use(cors());
 
 app.use('/users', users);
 app.use('/alerts', alerts);
+app.use('/device', device);
 
 mongoose.Promise = require('bluebird');
 mongoose.connect(connection.connectionString, {
     keepAlive: true,
     reconnectTries: Number.MAX_VALUE
 });
-
-app.post('/createDevice', function(req, res)
-{
-	try {
-		
-		let devicedata = req.body;
-
-		let deviceModelInfo = new deviceMasterModel(devicedata);
-
-		deviceMasterModel.findOne({deviceIMEIID: devicedata.deviceIMEIID}, function(err,obj) { 
-			//console.log(obj); 
-			if (obj == undefined) {
-				deviceModelInfo.save(function (err) {
-					if (err) {
-						LogError(err, "createDevice");
-						res.status(400).send(err);
-					}
-					else { res.json({ "success": true, "errormessage": "" }); }
-				});	
-			}
-			else
-			{
-				res.json({ "success": false, "errormessage": "userid already exists in the system" });
-			}		
-		
-		});        
-		
-	} catch (error) {
-		LogError(error, "createDevice");
-	}
-});
-
-
 
 app.post('/validateLogin', function(req, res)
 {	
@@ -166,19 +134,16 @@ app.post('/getShipmentByStatus', function(req, res)
     var end = new Date();      
 		
 		let devicedata = req.body;
-
     let query;
 
-    if (devicedata.status = "upcoming") {
-      query = { deliveryDate: {$gte: end }};
-    } else if (devicedata.status = "active") {
-      query = { deliveryDate: {$gte: end, $lt: start }};
+    if (devicedata.status === "upcoming") {
+      query =  {$gte: end };
     } else {
-      query = { deliveryDate: { $lt: end }};
+      query = { $lte: end };
     }
 
     shipmentSchemaModel.aggregate([
-      { "$match": { "shipment_name" : "ssd" } },    
+      { "$match": { "userid" : devicedata.userid, deliveryDate: query } },    
       {
           "$lookup": {
               "from": "shipmenttemplate_gps",
@@ -195,7 +160,6 @@ app.post('/getShipmentByStatus', function(req, res)
     {
       res.json({ success: true, data: results});
     }		
-      //console.log(util.inspect(results, { showHidden: false, depth: null }));
    });		
 	} catch (error) {
 		LogError(error, "getShipmentByStatus");

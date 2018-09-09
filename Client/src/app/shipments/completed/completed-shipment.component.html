@@ -2,13 +2,17 @@
     <div class="col-lg-12 col-md-12 col-sm-12 inner_div">
       <div class="col-md-12 col-sm-12 col-lg-12 row_padding">
           <div class="col-lg-2 col-md-2 col-sm-12 ">
-             <span class="ti-search search_icon"></span> <input type="text" class="form-control searchtxt_css" />
+             <span class="ti-search search_icon"></span> <input type="text" class="form-control searchtxt_css" [(ngModel)]="searchtxt" (keyup)="searchshipment()" />
           </div>
           <div class="col-lg-2 col-md-2 col-sm-12 ">
-                                  <select class="form-control txt_css"><option>Ship from: All Location</option></select>
+                                  <select class="form-control txt_css" [(ngModel)]= "fltertxt" (change)="filtershipment('shipfrom')">
+                                    <option value="0">Ship from: All Location</option>
+                                    <option value="{{shipfrom.shipFrom}}"  *ngFor="let shipfrom of ShipFromLocation">{{shipfrom.shipFrom}}</option>
+                                  </select>
                           </div>
                           <div class="col-lg-2 col-md-2 col-sm-12 ">
-                                  <select class="form-control txt_css"><option>Ship to: All Location2</option></select>
+                                  <select class="form-control txt_css" [(ngModel)]= "fltertxt" (change)="filtershipment('shipto')"><option value="0">Ship to: All Location2</option>
+                                    <option *ngFor="let shipto of ShipToLocation">{{shipto.shipTo}}</option></select>
                           </div>
           <div class="col-lg-4 col-md-4 col-sm-12 ">
 
@@ -21,7 +25,7 @@
           </div>
       </div>
       <div class="col-md-12 col-sm-12 col-lg-12 row_padding">
-      <div class="panel panel-primary">
+      <div class="panel panel-default">
           <div class="panel-heading"><span style="font-weight: bold;">Completed Today</span></div>
       <div class ="panel-body" style="border:1px solid #6f6a6a85;">
         <div class="row past_date_div">
@@ -45,10 +49,10 @@
              {{uShipment.shipment_name}}
               </div>
               <div class="col-lg-3 col-md-3 col-sm-12">
-                  {{uShipment.resultingTagsArray[0].shipFrom  }}
+                  {{uShipment.shipFrom  }}
               </div>
               <div class="col-lg-3 col-md-3 col-sm-12">
-                  {{uShipment.resultingTagsArray[0].shipTo  }}
+                  {{uShipment.shipTo  }}
               </div>
               <div class="col-lg-3 col-md-3 col-sm-12">
                 {{uShipment.shipDate | date:'medium'}}
@@ -63,7 +67,7 @@
       </div>
    </div>
 
-   <div class="panel panel-primary">
+   <div class="panel panel-default">
       <div class="panel-heading"><span style="font-weight: bold;">Completed Today</span></div>
 
       <div  class ="panel-body" style="border:1px solid #6f6a6a85;">
@@ -88,10 +92,10 @@
                  {{uShipment.shipment_name}}
                   </div>
                   <div class="col-lg-3 col-md-3 col-sm-12">
-                      {{uShipment.resultingTagsArray[0].shipFrom  }}
+                      {{uShipment.shipFrom  }}
                   </div>
                   <div class="col-lg-3 col-md-3 col-sm-12">
-                      {{uShipment.resultingTagsArray[0].shipTo  }}
+                      {{uShipment.shipTo  }}
                   </div>
                   <div class="col-lg-3 col-md-3 col-sm-12">
                     {{uShipment.shipDate | date:'medium'}}

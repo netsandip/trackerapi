@@ -6,8 +6,13 @@ var connection = require('../connection');
         
 deviceMasterSchema = mongoose.Schema({
     deviceIMEIID: Number,    
-    device_code: Number,    
+    device_code: Number,  
+    description: String,
+    battery_duration: String,
+    frequency: String,
+    location_method: String,
     device_provider: String,    
+    Organization_name: String,
     updated_date : Date,
     Created_date : { type : Date, default: Date.now }
 });

@@ -9,7 +9,8 @@ shipTemplate = mongoose.Schema({
     templateName: String,
     description: String,
     shipFrom: String,
-    shipTo: String,    
+    shipTo: String,   
+    userid: String, 
     updated_date : Date,
     Created_date : { type : Date, default: Date.now }
 });

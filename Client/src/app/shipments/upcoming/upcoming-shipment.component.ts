@@ -19,7 +19,9 @@ export class upcomingShipmentComponent implements OnInit {
      public tempPastShipment: Array<shipmentdetail>;
      public ShipFromLocation= [];
      public ShipToLocation= [];
-      constructor(private shipmentService: ShipmentService,  private global: Globals, private router: Router) {
+     public searchtxt:any = '';
+     public fltertxt: any = '';
+;      constructor(private shipmentService: ShipmentService,  private global: Globals, private router: Router) {
           this.UpcomingShipment = new Array<shipmentdetail>() ;
           this.PastShipment = new Array<shipmentdetail>() ;
        }
@@ -42,10 +44,16 @@ export class upcomingShipmentComponent implements OnInit {
         };
       this.shipmentService.getShipmentByStatus(userdetails).subscribe(data => {
              if (data.success) {
-             this.UpcomingShipment = data.data;
-             this.tempUpcomingShipment= data.data;
-            // this.UpcomingShipment.shipFrom = data.data.resultingTagsArray;
-            // console.log("data", this.UpcomingShipment );
+              data.data.forEach(element => {
+                console.log('element', element );
+              this.UpcomingShipment.push({shipment_id: element._id, shipment_name:element.shipment_name ,description: element.description,
+                shipment_template_id:element.shipment_template_id, templateid:'', deliveryDate:element.deliveryDate,
+                 linkdeviceIMEIID:element.linkdeviceIMEIID, shipFrom:element.resultingTagsArray[0].shipFrom,
+                 shipTo:element.resultingTagsArray[0].shipTo, shipDate: element.Created_date })
+               });
+             // this.UpcomingShipment = data.data;
+             this.tempUpcomingShipment =  this.UpcomingShipment;
+              console.log('data', this.UpcomingShipment );
              }
          } )
   }
@@ -56,8 +64,15 @@ export class upcomingShipmentComponent implements OnInit {
       };
     this.shipmentService.getShipmentByStatus(userdetails).subscribe(data => {
            if (data.success) {
-           this.PastShipment = data.data;
-           this.tempPastShipment = data.data;
+          // this.PastShipment = data.data;
+          data.data.forEach(element => {
+            console.log('element', element );
+          this.PastShipment.push({shipment_id: element._id, shipment_name:element.shipment_name ,description: element.description,
+            shipment_template_id:element.shipment_template_id, templateid:'', deliveryDate:element.deliveryDate,
+             linkdeviceIMEIID:element.linkdeviceIMEIID, shipFrom:element.resultingTagsArray[0].shipFrom,
+             shipTo:element.resultingTagsArray[0].shipTo, shipDate: element.Created_date })
+           });
+           this.tempPastShipment = this.PastShipment;
            }
        })
 }
@@ -74,19 +89,33 @@ this.shipmentService.getShipmentLocationByUser(userdetails).subscribe(data => {
        }
    })
 }
-filtershipment(data, shiptype) {
-//alert(shiptype);
-if (data === '0')
+filtershipment(shiptype) {
+if (this.fltertxt === '0')
 {
   this.UpcomingShipment = this.tempUpcomingShipment;
  this.PastShipment =  this.tempPastShipment;
 }
 else {
   if (shiptype === 'shipfrom') {
-    console.log("11", this.UpcomingShipment);
-   // this.UpcomingShipment = this.UpcomingShipment.filter(x => x.shipFrom.indexOf(data) > -1);
+    this.UpcomingShipment = this.tempUpcomingShipment.filter(x => x.shipFrom.indexOf(this.fltertxt) > -1);
+    this.PastShipment = this.tempPastShipment.filter(x => x.shipFrom.indexOf(this.fltertxt) > -1);
     }
+    else if (shiptype === 'shipto') {
+      this.UpcomingShipment = this.tempUpcomingShipment.filter(x => x.shipTo.indexOf(this.fltertxt) > -1);
+      this.PastShipment = this.tempPastShipment.filter(x => x.shipTo.indexOf(this.fltertxt) > -1);
+      }
  // this.tempUpcomingShipment
+}
+
+}
+searchshipment() {
+if (this.searchtxt.length >= 3) {
+  this.UpcomingShipment = this.tempUpcomingShipment.filter(x => x.shipment_name.indexOf(this.searchtxt) > -1);
+  this.PastShipment = this.tempPastShipment.filter(x => x.shipment_name.indexOf(this.searchtxt) > -1);
+}
+else{
+  this.UpcomingShipment = this.tempUpcomingShipment;
+  this.PastShipment = this.tempPastShipment;
 }
 
 }
