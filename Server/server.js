@@ -334,24 +334,34 @@ app.post('/getGraphsDataforSensors', function(req, res) {
         break;
     }
 
-    let pipeline = [
-        {
-           $match: { deviceIMEIID: req.body.deviceid, Created_date: {$gte: end, $lt: start }},
-        },
-        {
-          $group: {
-            _id: interval,
-            avgTemperature: {$avg: "$Temperature"},
-            avgHumidity: { $avg: "$humidity"},
-            avgPressure: { $avg: "$Pressure"},
-            avgLight: { $avg: "$Light"},
-            avgmotionActivity: { $avg: "$motionActivity"},
-            avgmAcceleration: { $avg: "$Acceleration"},
-            avgXYZ_Acceleration: { $avg: "$XYZ_Acceleration" },
-            avgOrientation: { $avg: "$Orientation" }
+    let test = {"y":{"$year":"$Created_date"},
+    "m":{"$month":"$Created_date"},
+    "d":{"$dayOfMonth":"$Created_date"},
+    "h":{"$hour":"$Created_date"} }
 
-          }
+    let pipeline = [
+      {
+        $match: { deviceIMEIID: req.body.deviceid, Created_date: {$gte: end, $lt: start }},
+      },      
+      {
+        $group: {
+          _id: test,
+          avgTemperature: {$avg: "$Temperature"},
+          avgHumidity: { $avg: "$humidity"},
+          avgPressure: { $avg: "$Pressure"},
+          avgLight: { $avg: "$Light"},
+          avgmotionActivity: { $avg: "$motionActivity"},
+          avgmAcceleration: { $avg: "$Acceleration"},
+          avgXYZ_Acceleration: { $avg: "$XYZ_Acceleration" },
+          avgOrientation: { $avg: "$Orientation" }
+
         }
+      },
+      { $sort: {   '_id.y': 1, 
+                   '_id.m': 1, 
+                   '_id.d': 1,
+                   '_id.h': 1
+     } }           
     ];
 
     deviceModel.aggregate(pipeline).exec(
