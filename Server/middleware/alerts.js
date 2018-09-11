@@ -252,16 +252,26 @@ router.post('/getAlertsGraphsByDeviceID', function(req, res) {
         break;
     }
 
+    let test = {"y":{"$year":"$Created_date"},
+    "m":{"$month":"$Created_date"},
+    "d":{"$dayOfMonth":"$Created_date"}
+     }
+
     let pipeline = [
         {
            $match: { Created_date: {$gte: end, $lt: start }, alerts_type: alertType, userid: userid },
         },
         {
           $group: {
-            _id: interval,           
+            _id: test,           
             count: { $sum: 1 }         
           }
-        }
+        },
+        { $sort: {   '_id.y': 1, 
+                   '_id.m': 1, 
+                   '_id.d': 1
+        } 
+      }  
     ];
 
     alertsTransmasterModel.aggregate(pipeline).exec(
